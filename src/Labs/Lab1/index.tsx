@@ -212,6 +212,9 @@ export default function Lab1()
 
                     <h4>Anchor tag</h4>
                     Please <a href="https://www.lipsum.com" id="wd-lipsum">click here</a> to get dummy text<br/>
+
+                    <h5>File upload</h5>
+                    <input id="wd-upload" type="file"/>
                 </form>
             </div>
 
