@@ -60,3 +60,6 @@ Follow these steps to contribute:
   git push origin feature/your-feature-name
   ```
 5. Open a pull request.
+
+## Images
+Images used are downloaded from google.com
