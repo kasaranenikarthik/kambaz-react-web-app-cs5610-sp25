@@ -1,50 +1,62 @@
-# React + TypeScript + Vite
+# Kambaz React Web App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a web application developed using React for the CS5610 course in Spring 2025.
 
-Currently, two official plugins are available:
+## Table of Contents
+- [Introduction](#introduction)
+- [Project Overview](#project-overview)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Self Contributing](#contributing)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Introduction
+The Kambaz React Web App is a project developed as part of the CS5610 Web Development course at Northeastern University. The application demonstrates various web development concepts and practices using the React framework.
 
-## Expanding the ESLint configuration
+## Project Overview
+This project is part of the CS5610 Web Development course curriculum. It aims to provide hands-on experience with modern web development technologies and best practices.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Features
+- Responsive design
+- Interactive UI components
 
-- Configure the top-level `parserOptions` property like this:
+## Installation
+To install and run the application locally, follow these steps:
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+1. Clone the repository:
+  ```bash
+  git clone https://github.com/kasaranenikarthik/kambaz-react-web-app-cs5610-sp25.git
+  ```
+2. Navigate to the project directory:
+  ```bash
+  cd kambaz-react-web-app-cs5610-sp25
+  ```
+3. Install the dependencies:
+  ```bash
+  npm install
+  ```
+4. Start the development server:
+  ```bash
+  npm run dev
+  ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Usage
+Once the development server is running, you can access the application in your web browser at `http://localhost:5173`.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Self Contributing
+Follow these steps to contribute:
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+1. Fork the repository.
+2. Create a new branch:
+  ```bash
+  git checkout -b feature/your-feature-name
+  ```
+3. Make your changes and commit them:
+  ```bash
+  git commit -m "Add your feature"
+  ```
+4. Push to the branch:
+  ```bash
+  git push origin feature/your-feature-name
+  ```
+5. Open a pull request.

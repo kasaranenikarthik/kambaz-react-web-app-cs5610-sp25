@@ -2,6 +2,10 @@ export default function Lab1()
 {
     return (
         <div id="wd-lab1">
+            <h1>Full Name: Geeta Venkata Siva Karthik Kasaraneni</h1>
+            <h2>Github repo:
+                <a href="https://github.com/kasaranenikarthik/kambaz-react-web-app-cs5610-sp25.git" id="wd-github"> Github repo url</a>
+            </h2>
             <h2>Lab1</h2>
             <h3>HTML Examples</h3>
             <div id="wd-h-tag">
@@ -217,8 +221,6 @@ export default function Lab1()
                     <input id="wd-upload" type="file"/>
                 </form>
             </div>
-
-
         </div>
     );
 }
