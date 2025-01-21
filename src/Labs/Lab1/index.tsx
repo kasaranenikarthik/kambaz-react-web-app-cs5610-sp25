@@ -3,6 +3,7 @@ export default function Lab1()
     return (
         <div id="wd-lab1">
             <h1>Full Name: Geeta Venkata Siva Karthik Kasaraneni</h1>
+            <h2>Section: CS5610 35649 Web Development SEC 01 Spring 2025 [VTL-2-OL]</h2>
             <h2>Github repo:
                 <a href="https://github.com/kasaranenikarthik/kambaz-react-web-app-cs5610-sp25.git" id="wd-github"> Github repo url</a>
             </h2>
