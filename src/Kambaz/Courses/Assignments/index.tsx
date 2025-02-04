@@ -11,7 +11,7 @@ export default function Assignments() {
       <div id="wd-assignments">
         <div id="input-group" className="d-flex justify-content-end">
           <input className="rounded-3 me-2 fs-5" placeholder="🔍 Search for Assignment" id="wd-search-assignment" />
-          <Button variant="danger" size="lg" className="me-1" id="wd-add-assignment">
+          <Button variant="danger" size="lg" className="me-2" id="wd-add-assignment">
             <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
             Assignment
           </Button>
@@ -35,7 +35,7 @@ export default function Assignments() {
                 <AssignmentControlButtons />
                   <BsGripVertical className="me-2 fs-3" />
                   <PiNotePencilBold className="me-2 fs-3" />
-                  A1 - ENV + HTML <br />
+                  <a href="#/Kambaz/Courses/1234/Assignments/123" className="wd-assignment-link text-black text-ud" > A1 - ENV + HTML</a> <br />
                   <span className="wd-assigment-info d-block mt-1 ps-5">
                     Multiple Modules | <b>Not available until</b> May 6 at 12:00am | <b>Due</b> May 13 at 11:59pm | 100 pts
                   </span>
@@ -44,7 +44,7 @@ export default function Assignments() {
                 <AssignmentControlButtons />
                 <BsGripVertical className="me-2 fs-3" />
                 <PiNotePencilBold className="me-2 fs-3" />
-                A2 - CSS + BOOTSTRAP 
+                <a href="#/Kambaz/Courses/1234/Assignments/124" className="wd-assignment-link text-black" > A2 - CSS + BOOTSTRAP </a> <br />
                 <div className="wd-assigment-info d-block mt-1 ps-5">
                   Multiple Modules | <b>Not available until</b> May 13 at 12:00am | <b>Due</b> May 20 at 11:59pm | 100 pts
                 </div>
@@ -53,7 +53,7 @@ export default function Assignments() {
                 <AssignmentControlButtons />
                 <BsGripVertical className="me-2 fs-3" />
                 <PiNotePencilBold className="me-2 fs-3" />
-                A3 - JAVASCRIPT + REACT 
+                <a href="#/Kambaz/Courses/1234/Assignments/125" className="wd-assignment-link text-black" > A3 - JAVASCRIPT + REACT </a> <br />
                 <div className="wd-assigment-info d-block mt-1 ps-5">
                   Multiple Modules | <b>Not available until</b> May 20 at 12:00am | <b>Due</b> May 27 at 11:59pm | 100 pts
                 </div>

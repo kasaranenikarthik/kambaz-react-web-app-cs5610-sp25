@@ -16,7 +16,7 @@ export default function Courses() {
       </h2>
       <hr />
       <div className="d-flex">
-        <div className="d-none w-25 d-md-block">
+        <div className="d-none w-20 d-md-block">
           <CourseNavigation />
         </div>
         <div className="flex-fill">

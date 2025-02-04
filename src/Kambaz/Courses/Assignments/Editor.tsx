@@ -53,18 +53,21 @@ export default function AssignmentEditor() {
               <Form.Group className="p-3 mb-3 w-100 border" controlId="wd-assign-to">
                 <Form.Label className="me-3">Assign to</Form.Label>
                 <Form.Control type="text" placeholder="Everyone" />
-                <Form.Group className="mb-3 d-flex" controlId="wd-due-date">
+                <Form.Group className="mt-2" controlId="wd-due-date">
                   <Form.Label>Due</Form.Label>
                   <Form.Control type="date" placeholder="2024-05-13" />
                 </Form.Group>
-                <Form.Group className="mb-3 d-flex" controlId="wd-available-from">
-                  <Form.Label>Available From</Form.Label>
-                  <Form.Control type="date" placeholder="2024-05-10" />
+                <Form.Group className="mt-2 d-flex justify-content-end">
+                  <Form.Group className="w-50" controlId="wd-available-from">
+                    <Form.Label>Available From</Form.Label>
+                    <Form.Control type="date" placeholder="2024-05-10" />
+                  </Form.Group>
+                  <Form.Group className="ms-2 w-50" controlId="wd-available-until">
+                    <Form.Label className="me-2">Until</Form.Label>
+                    <Form.Control type="date" placeholder="2024-05-20" />
+                  </Form.Group>
                 </Form.Group>
-                <Form.Group className="mb-3 d-flex" controlId="wd-available-until">
-                  <Form.Label className="me-2">Until</Form.Label>
-                  <Form.Control size="sm" type="date" placeholder="2024-05-20" />
-                </Form.Group>
+                
               </Form.Group>
               
             </Form.Group>
