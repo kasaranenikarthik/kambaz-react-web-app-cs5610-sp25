@@ -4,6 +4,7 @@ import { PiNotePencilBold } from "react-icons/pi";
 import { SlOptionsVertical } from "react-icons/sl";
 import AssignmentControlButtons from "./AssignmentControlButtons";
 import { Button, ListGroup } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 
 export default function Assignments() {
@@ -35,7 +36,9 @@ export default function Assignments() {
                 <AssignmentControlButtons />
                   <BsGripVertical className="me-2 fs-3" />
                   <PiNotePencilBold className="me-2 fs-3" />
-                  <a href="#/Kambaz/Courses/1234/Assignments/123" className="wd-assignment-link text-black text-ud" > A1 - ENV + HTML</a> <br />
+                  <Link to="123/" className="wd-assignment-link text-black" >
+                   A1 - ENV + HTML
+                  </Link> <br />
                   <span className="wd-assigment-info d-block mt-1 ps-5">
                     Multiple Modules | <b>Not available until</b> May 6 at 12:00am | <b>Due</b> May 13 at 11:59pm | 100 pts
                   </span>
@@ -44,7 +47,10 @@ export default function Assignments() {
                 <AssignmentControlButtons />
                 <BsGripVertical className="me-2 fs-3" />
                 <PiNotePencilBold className="me-2 fs-3" />
-                <a href="#/Kambaz/Courses/1234/Assignments/124" className="wd-assignment-link text-black" > A2 - CSS + BOOTSTRAP </a> <br />
+                 <Link to="124/" className="wd-assignment-link text-black"> 
+                  A2 - CSS + BOOTSTRAP
+                 </Link>
+                 <br />
                 <div className="wd-assigment-info d-block mt-1 ps-5">
                   Multiple Modules | <b>Not available until</b> May 13 at 12:00am | <b>Due</b> May 20 at 11:59pm | 100 pts
                 </div>
@@ -53,7 +59,9 @@ export default function Assignments() {
                 <AssignmentControlButtons />
                 <BsGripVertical className="me-2 fs-3" />
                 <PiNotePencilBold className="me-2 fs-3" />
-                <a href="#/Kambaz/Courses/1234/Assignments/125" className="wd-assignment-link text-black" > A3 - JAVASCRIPT + REACT </a> <br />
+                <Link to="125/" className="wd-assignment-link text-black" >
+                  A3 - JAVASCRIPT + REACT
+                </Link> <br />
                 <div className="wd-assigment-info d-block mt-1 ps-5">
                   Multiple Modules | <b>Not available until</b> May 20 at 12:00am | <b>Due</b> May 27 at 11:59pm | 100 pts
                 </div>
