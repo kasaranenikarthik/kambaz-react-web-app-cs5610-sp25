@@ -4,6 +4,7 @@ export default function Signup() {
     return (
         <div id="wd-signup-screen">
         <Form>
+            <Form.Label className="fs-3 mb-3">Sign up</Form.Label><br />
             <Form.Group className="mb-3">
                 <Form.Label>Username</Form.Label>
                 <Form.Control type="text" placeholder="Enter username" />
