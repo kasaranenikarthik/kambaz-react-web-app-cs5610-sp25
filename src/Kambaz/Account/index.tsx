@@ -6,9 +6,9 @@ import AccountNavigation from "./Navigation";
 
 export default function Account() {
     return (
-        <div id="wd-account-screen " className="wd d-flex">
+        <div id="wd-account-screen" className="wd d-flex">
           <AccountNavigation />
-          <div className="w-25">
+          <div className="ms-3 w-25">
             <Routes>
               <Route path="/"        element={<Navigate to="/Kambaz/Account/Signin" />} />
               <Route path="/Signin"  element={<Signin />} />
