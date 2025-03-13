@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import { Row, Col, Card, Button, FormControl } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { addEnrollment } from "./enrollReducer";
+import { addEnrollment, deleteEnrollment } from "./enrollReducer";
 import { v4 as uuidv4 } from "uuid";
+import { useState } from "react";
 
 
 export default function Dashboard(
@@ -15,9 +16,20 @@ export default function Dashboard(
   const { enrollments }  = useSelector((state: any) => state.enrollReducer);
   const dispatch = useDispatch();
 
+  const [showAllCourses, setShowAllCourses] = useState(false);
+
   return (
     <div id="wd-dashboard">
       <h1 id="wd-dashboard-title">Dashboard</h1> <hr />
+      {
+        (currentUser.role === "STUDENT" || currentUser.role === "FACULTY") && (
+          <Button
+              className="btn float-end btn-primary ms-2"
+              onClick={() => setShowAllCourses(!showAllCourses)}
+          > {showAllCourses ? "Show Enrolled Courses" : "Show All Courses"}
+          </Button>
+        )
+      }
       { currentUser.role === "FACULTY" && <>
           <h5>New Course
           <Button className="btn btn-primary float-end mb-2" id="wd-add-new-course-click" onClick={() => {
@@ -35,16 +47,24 @@ export default function Dashboard(
       }
       <h2 id="wd-dashboard-published">Published Courses ({courses.filter((course) => enrollments.some(
               (enrollment: any) =>
-                enrollment.user === currentUser._id &&
-                enrollment.course === course._id
-              )).length})</h2> <hr />
+                { if(!showAllCourses) {
+                  return enrollment.user === currentUser._id && enrollment.course === course._id
+                } else {
+                  return enrollment
+                }
+              })).length})</h2> <hr />
       <div id="wd-dashboard-courses">
         <Row xs={1} md={5} className="g-4">
           {courses.filter((course) =>
             enrollments.some(
               (enrollment: any) =>
-                enrollment.user === currentUser._id &&
-                enrollment.course === course._id
+                { 
+                  if(!showAllCourses) {
+                    return enrollment.user === currentUser._id && enrollment.course === course._id
+                  } else {
+                    return enrollment
+                  }
+                }
               )
             )
             .map((course) => (
@@ -77,6 +97,27 @@ export default function Dashboard(
                           className="btn btn-warning me-2 float-end" >
                           Edit
                         </Button>
+                      }
+                      { (currentUser.role === "STUDENT" || currentUser.role === "FACULTY") && enrollments.find(
+                          (enrollment: any) => enrollment.user === currentUser._id && enrollment.course === course._id
+                        ) ?
+                        (<Button className="btn btn-danger mt-2 mb-2 float-end" id="wd-unenroll-course-click"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            dispatch(deleteEnrollment(enrollments.find(
+                              (enrollment: any) => enrollment.user === currentUser._id && enrollment.course === course._id
+                            )));
+                          }
+                          }>
+                          Unenroll
+                        </Button>) :
+                        (<Button className="btn btn-primary mt-2 mb-2 float-end" id="wd-enroll-course-click"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            dispatch(addEnrollment({ _id: uuidv4(), user: currentUser._id, course: course._id }));
+                            }}>
+                          Enroll
+                        </Button>)
                       }
                     </Card.Body>
                   </Link>
