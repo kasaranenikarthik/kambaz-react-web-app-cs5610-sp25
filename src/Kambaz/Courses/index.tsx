@@ -7,6 +7,7 @@ import CourseNavigation from "./Navigation";
 import { Navigate, Route, Routes, useLocation, useParams } from "react-router";
 import PeopleTable from "./People/Table";
 import ProtectedAssignmentRoute from "./Assignments/ProtectedAssignmentRoute";
+import ProtectedCourseRoute from "./ProtectedCourseRoute";
 
 export default function Courses({courses}: {courses: any[]; }) {
   const { cid } = useParams();
@@ -25,12 +26,12 @@ export default function Courses({courses}: {courses: any[]; }) {
         </div>
         <div className="flex-fill">
           <Routes>
-            <Route path="/" element={<Navigate to="Home" />} />
-            <Route path="Home" element={<Home />} />
-            <Route path="Modules" element={<Modules />} />
-            <Route path="Assignments" element={<Assignments />} />
-            <Route path="Assignments/:aid" element={<ProtectedAssignmentRoute><AssignmentEditor /> </ProtectedAssignmentRoute>} />
-            <Route path="People" element={<PeopleTable />} />
+            <Route path="/" element={<ProtectedCourseRoute cid={cid}> <Navigate to="Home" /> </ProtectedCourseRoute>} />
+            <Route path="Home" element={<ProtectedCourseRoute cid={cid}> <Home /> </ProtectedCourseRoute>} />
+            <Route path="Modules" element={ <ProtectedCourseRoute cid={cid}> <Modules /> </ProtectedCourseRoute>} />
+            <Route path="Assignments" element={<ProtectedCourseRoute cid={cid}> <Assignments /> </ProtectedCourseRoute>} />
+            <Route path="Assignments/:aid" element={<ProtectedCourseRoute cid={cid}> <ProtectedAssignmentRoute><AssignmentEditor /> </ProtectedAssignmentRoute> </ProtectedCourseRoute>} />
+            <Route path="People" element={<ProtectedCourseRoute cid={cid}> <PeopleTable /> </ProtectedCourseRoute>} />
           </Routes>
         </div>
       </div> 
