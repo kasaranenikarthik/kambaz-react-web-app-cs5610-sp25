@@ -1,4 +1,3 @@
-import { courses } from "../Database";
 import { FaAlignJustify } from "react-icons/fa";
 import Assignments from "./Assignments";
 import AssignmentEditor from "./Assignments/Editor";
@@ -7,8 +6,9 @@ import Modules from "./Modules";
 import CourseNavigation from "./Navigation";
 import { Navigate, Route, Routes, useLocation, useParams } from "react-router";
 import PeopleTable from "./People/Table";
+import ProtectedAssignmentRoute from "./Assignments/ProtectedAssignmentRoute";
 
-export default function Courses() {
+export default function Courses({courses}: {courses: any[]; }) {
   const { cid } = useParams();
   const pathname = useLocation();
   const course = courses.find((course) => course._id === cid);
@@ -29,7 +29,7 @@ export default function Courses() {
             <Route path="Home" element={<Home />} />
             <Route path="Modules" element={<Modules />} />
             <Route path="Assignments" element={<Assignments />} />
-            <Route path="Assignments/:aid" element={<AssignmentEditor />} />
+            <Route path="Assignments/:aid" element={<ProtectedAssignmentRoute><AssignmentEditor /> </ProtectedAssignmentRoute>} />
             <Route path="People" element={<PeopleTable />} />
           </Routes>
         </div>

@@ -1,29 +1,41 @@
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
-import { useParams } from "react-router";
-import * as db from "../../Database";
+import { useNavigate, useParams } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { updateAssignment } from "./reducer";
+import { useState } from "react";
 
 
 export default function AssignmentEditor() {
   const { cid } = useParams();
   const {aid} = useParams();
-  const assignment = db.assignments.filter((assignment) => assignment._id === aid && assignment.course === cid);
+  const {assignments} = useSelector((state: any) => state.assignmentReducer)
+  const assignment = assignments.filter((assignment: any) => assignment._id === aid && assignment.course === cid);
+  const navigate = useNavigate();
+  
+  const [assignmentName, setAssignmentName] = useState<string>(assignment[0].title);
+  const [assignmentDescription, setAssignmentDescription] = useState<string>(assignment[0].description);
+  const [assignmentPoints, setAssignmentPoints] = useState(Number(assignment[0].points));
+  const [assignmentDueDate, setAssignmentDueDate] = useState(assignment[0].due);
+  const [assignmentAvailableFrom, setAssignmentAvailableFrom] = useState(assignment[0].available);
+ 
+  const dispatch = useDispatch();
 
     return (
       <Container id="wd-assignments-editor">
-        { assignment.length === 1 &&
-          assignment.map((assignment) => (
+        { assignment.length === 1  &&
+          (
             <Form className="p-3 border fs-5 wd-assignments-editor"> 
               <Form.Group className="mb-3" controlId="wd-name">
                 <Form.Label>Assignment Name</Form.Label>
-                <Form.Control type="text" placeholder={`${assignment.title}`} />
+                <Form.Control type="text" autoFocus={true} defaultValue={`${assignmentName}`} onChange={(e) => setAssignmentName(e.target.value)} />
               </Form.Group>
               <Form.Group className="mb-3" controlId="wd-description">
                 <Form.Label>Description</Form.Label>
-                <Form.Control as="textarea" rows={5} placeholder={`${assignment.description} ${assignment.title}`} />
+                <Form.Control as="textarea" rows={5} defaultValue={`${assignmentDescription}`} onChange={(e) => setAssignmentDescription(e.target.value)} />
               </Form.Group>
               <Form.Group className="mb-3 d-flex" controlId="wd-points">
                 <Form.Label className="me-3 w-50 text-end">Points</Form.Label>
-                <Form.Control type="number" placeholder={`${assignment.points}`}/>
+                <Form.Control type="number" defaultValue={`${assignmentPoints}`} onChange={(e) => setAssignmentPoints(Number(e.target.value))}/>
               </Form.Group>
               <Form.Group className="mb-3 d-flex" controlId="wd-group">
                 <Form.Label className="me-3 w-50 text-end">Assignment Group</Form.Label>
@@ -63,16 +75,16 @@ export default function AssignmentEditor() {
                   <Form.Control type="text" placeholder="Everyone" />
                   <Form.Group className="mt-2" controlId="wd-due-date">
                     <Form.Label>Due</Form.Label>
-                    <Form.Control type="datetime-local" defaultValue={`${assignment.due}`} />
+                    <Form.Control type="datetime-local" defaultValue={`${assignmentDueDate}`} onChange={(e) => setAssignmentDueDate(e.target.value)}/>
                   </Form.Group>
                   <Form.Group className="mt-2 d-flex justify-content-end">
                     <Form.Group className="w-50" controlId="wd-available-from">
                       <Form.Label>Available From</Form.Label>
-                      <Form.Control type="datetime-local" defaultValue={`${assignment.available}`} />
+                      <Form.Control type="datetime-local" defaultValue={`${assignmentAvailableFrom}`} onChange={(e) => setAssignmentAvailableFrom(e.target.value)} />
                     </Form.Group>
                     <Form.Group className="ms-2 w-50" controlId="wd-available-until">
                       <Form.Label className="me-2">Until</Form.Label>
-                      <Form.Control type="datetime-local" defaultValue={`${assignment.due}`}/>
+                      <Form.Control type="datetime-local" defaultValue={`${assignmentDueDate}`} onChange={(e) => setAssignmentDueDate(e.target.value)} />
                     </Form.Group>
                   </Form.Group>
                   
@@ -83,17 +95,29 @@ export default function AssignmentEditor() {
               <Form.Group className="d-flex justify-content-end">
                 <Row>
                   <Col>
-                    <Button variant="secondary" size="lg"  id="wd-cancel">Cancel</Button>
+                    <Button variant="secondary" size="lg"  id="wd-cancel" onClick={ () => navigate(-1)}>Cancel</Button>
                   </Col>
                   <Col>
-                    <Button variant="secondary" className="bg-danger text-white" size="lg" id="wd-save">Save</Button>
+                    <Button variant="secondary" className="bg-danger text-white" size="lg" id="wd-save" onClick={(e) => {
+                      e.preventDefault();
+                      dispatch(updateAssignment({
+                        "_id": aid,
+                        "title": assignmentName,
+                        "course": cid,
+                        "points": assignmentPoints,
+                        "description": assignmentDescription,
+                        "due": assignmentDueDate,
+                        "available": assignmentAvailableFrom,
+                        "until": assignmentDueDate
+                      }));
+                      navigate(-1);
+                    }}>Save</Button>
                   </Col>
                 </Row>
               </Form.Group>
             </Form>
-          ))
-        }
-        
+          )
+        }  
       </Container>
   );
 }
