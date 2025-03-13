@@ -7,9 +7,9 @@ export default function AssignmentCreator({handleClose, addAssignment} : {handle
   const [assignmentName, setAssignmentName] = useState("");
   const [assignmentDescription, setAssignmentDescription] = useState("");
   const [assignmentPoints, setAssignmentPoints] = useState(0);
-  const [assignmentDueDate, setAssignmentDueDate] = useState(new Date());
-  const [assignmentAvailableFrom, setAssignmentAvailableFrom] = useState(new Date());
-  const [assignmentAvailableUntil, setAssignmentAvailableUntil] = useState(new Date());
+  const [assignmentDueDate, setAssignmentDueDate] = useState("");
+  const [assignmentAvailableFrom, setAssignmentAvailableFrom] = useState("");
+  const [assignmentAvailableUntil, setAssignmentAvailableUntil] = useState("");
   const {cid} = useParams();
 
   return(
@@ -33,16 +33,16 @@ export default function AssignmentCreator({handleClose, addAssignment} : {handle
                 </Form.Group>
                 <Form.Group className="mt-2" controlId="wd-due-date">
                   <Form.Label>Due</Form.Label>
-                  <Form.Control type="datetime-local" onChange={(e) => setAssignmentDueDate(new Date(e.target.value))}/>
+                  <Form.Control type="datetime-local" onChange={(e) => setAssignmentDueDate(e.target.value)}/>
                 </Form.Group>
                 <Form.Group className="mt-2">
                   <Form.Group controlId="wd-available-from">
                     <Form.Label>Available From</Form.Label>
-                    <Form.Control type="datetime-local"  onChange={(e) => setAssignmentAvailableFrom(new Date(e.target.value))} />
+                    <Form.Control type="datetime-local"  onChange={(e) => setAssignmentAvailableFrom(e.target.value)} />
                   </Form.Group>
                   <Form.Group className="mt-2" controlId="wd-available-until">
                     <Form.Label>Until</Form.Label>
-                    <Form.Control type="datetime-local"  onChange={(e) => setAssignmentAvailableUntil(new Date(e.target.value))} />
+                    <Form.Control type="datetime-local"  onChange={(e) => setAssignmentAvailableUntil(e.target.value)} />
                   </Form.Group>
                 </Form.Group>
                 
