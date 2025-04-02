@@ -5,10 +5,11 @@ import { SlOptionsVertical } from "react-icons/sl";
 import AssignmentControlButtons from "./AssignmentControlButtons";
 import { Button, ListGroup, Modal} from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
-import { useState } from "react";
-import { addAssignment, deleteAssignment } from "./reducer";
+import { useEffect, useState } from "react";
+import {setAssignmnets } from "./reducer";
 import AssignmentCreator from "./shortEditor";
 import { useDispatch, useSelector } from "react-redux";
+import * as assignmentClient from "./client";
 
 
 
@@ -18,19 +19,30 @@ export default function Assignments() {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   
   const { cid } = useParams();
-  const { assignments } = useSelector((state: any) => state.assignmentReducer);
+  const assignments = useSelector((state: any) => state.assignmentReducer.assignments);
   
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const addAssignments = (assignment: any) => {
-    dispatch(addAssignment(assignment));
+  const addAssignments = async (assignment: any) => {
+    await assignmentClient.createAssignment(cid, assignment);
+    fetchAssignments();
   }
 
-  const deleteAssignments = (assignmentId: any) => {
-    dispatch(deleteAssignment(assignmentId));
+  const deleteAssignments = async (assignmentId: any) => {
+    await assignmentClient.deleteAssignment(cid, assignmentId);
+    fetchAssignments();
   }
+
+  const fetchAssignments = async () => {
+    const assignments = await assignmentClient.getAssignmentsForCourse(cid);
+    dispatch(setAssignmnets(assignments));
+  }
+
+  useEffect(() => { 
+    fetchAssignments();
+  }, []);
   
     return (
       <div id="wd-assignments">
@@ -59,7 +71,7 @@ export default function Assignments() {
         </div>
         <br />
         <ListGroup className="rounded-0 mt-2" id="wd-modules">
-          { assignments.filter((assignment) => assignment.course === cid).length >0 && 
+          { assignments.length >0 && 
             <ListGroup.Item className="wd-module p-0 mb-5 fs-5 border-gray">
               <div className="wd-title ps-2 bg-secondary"> 
                 <BsGripVertical className="me-2 fs-3" /> ASSIGNMENTS 
@@ -73,7 +85,7 @@ export default function Assignments() {
                 </div>
               </div>
               <ListGroup className="wd-lessons rounded-0">
-              { assignments.filter((a) => a.course === cid).map((a) => (
+              { assignments.map((a) => (
                 <ListGroup.Item className="wd-lesson p-3 ps-1">
                   {currentUser.role === "FACULTY" &&
                   <>

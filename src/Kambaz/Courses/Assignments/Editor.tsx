@@ -1,8 +1,9 @@
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
-import { updateAssignment } from "./reducer";
+import { useSelector } from "react-redux";
+
 import { useState } from "react";
+import * as assignmentClient from "./client";
 
 
 export default function AssignmentEditor() {
@@ -17,8 +18,6 @@ export default function AssignmentEditor() {
   const [assignmentPoints, setAssignmentPoints] = useState(Number(assignment[0].points));
   const [assignmentDueDate, setAssignmentDueDate] = useState(assignment[0].due);
   const [assignmentAvailableFrom, setAssignmentAvailableFrom] = useState(assignment[0].available);
- 
-  const dispatch = useDispatch();
 
     return (
       <Container id="wd-assignments-editor">
@@ -100,7 +99,7 @@ export default function AssignmentEditor() {
                   <Col>
                     <Button variant="secondary" className="bg-danger text-white" size="lg" id="wd-save" onClick={(e) => {
                       e.preventDefault();
-                      dispatch(updateAssignment({
+                      assignmentClient.updateAssignment(cid, aid, {
                         "_id": aid,
                         "title": assignmentName,
                         "course": cid,
@@ -109,7 +108,7 @@ export default function AssignmentEditor() {
                         "due": assignmentDueDate,
                         "available": assignmentAvailableFrom,
                         "until": assignmentDueDate
-                      }));
+                      });
                       navigate(-1);
                     }}>Save</Button>
                   </Col>
