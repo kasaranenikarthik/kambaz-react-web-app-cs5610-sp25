@@ -9,6 +9,11 @@ export const USERS_API = `${REMOTE_SERVER}/api/users`;
 export const COURSES_API = `${REMOTE_SERVER}/api/courses`;
 export const ENROLL_API = `${REMOTE_SERVER}/api/enrollments`;
 
+export const findAllUsers = async () => {
+  const response = await axiosWithCredentials.get(USERS_API);
+  return response.data;
+}
+
 export const findMyCourses = async () => {
   const { data } = await axiosWithCredentials.get(`${USERS_API}/current/courses`);
   return data;
@@ -57,4 +62,29 @@ export const addEnrollment = async (enrollment: any) => {
   export const findAllEnrollments = async () => {
     const { data } = await axiosWithCredentials.get(`${ENROLL_API}`);
     return data;
+  }
+
+  export const findUsersByRole = async (role: string) => {
+    const response = await axiosWithCredentials.get(`${USERS_API}?role=${role}`);
+    return response.data;
+  }
+
+  export const findUsersByPartialName = async (name: string) => { 
+    const response = await axios.get(`${USERS_API}?name=${name}`); 
+    return response.data; 
+  }; 
+
+export const findUserById = async (uid: string) => {
+    const response = await axiosWithCredentials.get(`${USERS_API}/${uid}`);
+    return response.data;
+  };
+
+  export const deleteUser = async (uid: string) => {
+    const response = await axiosWithCredentials.delete(`${USERS_API}/${uid}`);
+    return response.data;
+  }
+
+  export const createUser = async (user: any) => {
+    const response = await axiosWithCredentials.post(`${USERS_API}`, user);
+    return response.data;
   }

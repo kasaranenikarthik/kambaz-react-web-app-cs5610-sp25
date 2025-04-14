@@ -1,5 +1,6 @@
 import { FaAlignJustify } from "react-icons/fa";
 import Assignments from "./Assignments";
+import {Quizzes} from "./Quizzes";
 import AssignmentEditor from "./Assignments/Editor";
 import Home from "./Home";
 import Modules from "./Modules";
@@ -32,6 +33,7 @@ export default function Courses({courses}: {courses: any[]; }) {
             <Route path="Assignments" element={<ProtectedCourseRoute cid={cid}> <Assignments /> </ProtectedCourseRoute>} />
             <Route path="Assignments/:aid" element={<ProtectedCourseRoute cid={cid}> <ProtectedAssignmentRoute><AssignmentEditor /> </ProtectedAssignmentRoute> </ProtectedCourseRoute>} />
             <Route path="People" element={<ProtectedCourseRoute cid={cid}> <PeopleTable /> </ProtectedCourseRoute>} />
+            <Route path="Quizzes" element={<ProtectedCourseRoute cid={cid}> <Quizzes/> </ProtectedCourseRoute>} />
           </Routes>
         </div>
       </div> 

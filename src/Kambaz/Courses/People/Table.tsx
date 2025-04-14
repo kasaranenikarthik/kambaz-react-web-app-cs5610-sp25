@@ -1,15 +1,12 @@
 import { Table } from "react-bootstrap";
 import { FaUserCircle } from "react-icons/fa";
-import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import Details from "./Details";
+import { Link } from "react-router-dom";
 
-export default function PeopleTable() {
-    const { cid } = useParams();
-    const { users } = useSelector((state: any) => state.userReducer);
-    const { enrollments } = useSelector((state: any) => state.enrollReducer);
-
+export default function PeopleTable( {users = []} : {users?: any[]} ) {
     return (
         <div id="wd-people-table">
+            <Details/>
             <Table striped bordered>
                 <thead>
                     <tr>
@@ -22,13 +19,14 @@ export default function PeopleTable() {
                     </tr>
                 </thead>
                 <tbody>
-                { users.filter((usr) => enrollments.some((enrollment) => enrollment.user === usr._id && enrollment.course === cid))
-                    .map((user) => (
+                { users.map((user) => (
                     <tr key={user._id}>
                         <td className="wd-full-name text-nowrap">
+                        <Link to={`/Kambaz/Account/Users/${user._id}`} className="text-decoration-none"> 
                         <FaUserCircle className="me-2 fs-1 text-secondary" />
                         <span className="wd-first-name">{user.firstName}</span>
                         <span className="wd-last-name">{user.lastName}</span>
+                        </Link>
                         </td>
                         <td className="wd-login-id">{user.loginId}</td>
                         <td className="wd-section">{user.section}</td>

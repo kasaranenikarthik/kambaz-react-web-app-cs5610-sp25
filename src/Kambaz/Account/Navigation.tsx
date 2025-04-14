@@ -13,9 +13,13 @@ export default function AccountNavigation() {
           </Link><br />
         </>}
         {currentUser && <>
-          <Link to={`/Kambaz/Account/Profile`} className="list-group-item list-group-item-action active border border-0">
+          <Link to={`/Kambaz/Account/Profile`} className={`list-group-item list-group-item-action border border-0 ${pathname.includes("Profile") ? "active" : "text-danger"}`}>
             Profile
           </Link><br />
         </>}<br />
+        {currentUser && currentUser.role === "ADMIN" && ( 
+          <Link to={`/Kambaz/Account/Users`} className={`list-group-item list-group-item-action border border-0 ${pathname.includes("Users") ? "active" : "text-danger"}`}> 
+            Users 
+          </Link> )} 
     </div>
 );}
