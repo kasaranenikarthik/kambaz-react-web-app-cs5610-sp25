@@ -3,7 +3,7 @@ import { Row, Col, Card, Button, FormControl } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { setEnrollments, addEnrollment, deleteEnrollments } from "./enrollReducer";
 import { v4 as uuidv4 } from "uuid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as courseClient from "./Courses/client";
 import * as accountClient from "./Account/client";
 
@@ -49,9 +49,20 @@ export default function Dashboard(
     fetchAllCourses();
   };
 
+  useEffect(() => {
+    if (currentUser.role === "STUDENT" || currentUser.role === "FACULTY") {
+      fetchEnrolledCourses();
+    } else {
+      fetchAllCourses();
+    }
+  }
+  , [currentUser]);
+
   return (
     <div id="wd-dashboard">
-      {currentUser}
+      <div>
+        currentUser: {currentUser.firstName} {currentUser.lastName} <br />
+      </div>
       <h1 id="wd-dashboard-title">Dashboard</h1> <hr />
       {
         (currentUser.role === "STUDENT" || currentUser.role === "FACULTY") && (
