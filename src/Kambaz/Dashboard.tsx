@@ -21,7 +21,6 @@ export default function Dashboard(
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const { enrollments } = useSelector((state: any) => state.enrollReducer);
 
-
   const dispatch = useDispatch();
 
   const [showAllCourses, setShowAllCourses] = useState(false);
@@ -52,6 +51,7 @@ export default function Dashboard(
 
   return (
     <div id="wd-dashboard">
+      {currentUser}
       <h1 id="wd-dashboard-title">Dashboard</h1> <hr />
       {
         (currentUser.role === "STUDENT" || currentUser.role === "FACULTY") && (
