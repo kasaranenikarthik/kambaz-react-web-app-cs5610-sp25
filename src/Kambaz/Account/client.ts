@@ -70,7 +70,7 @@ export const addEnrollment = async (enrollment: any) => {
   }
 
   export const findUsersByPartialName = async (name: string) => { 
-    const response = await axios.get(`${USERS_API}?name=${name}`); 
+    const response = await axiosWithCredentials.get(`${USERS_API}?name=${name}`); 
     return response.data; 
   }; 
 
