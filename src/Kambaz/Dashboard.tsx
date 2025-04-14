@@ -50,19 +50,12 @@ export default function Dashboard(
   };
 
   useEffect(() => {
-    if (currentUser.role === "STUDENT" || currentUser.role === "FACULTY") {
-      fetchEnrolledCourses();
-    } else {
-      fetchAllCourses();
-    }
+    fetchEnrolledCourses();
   }
   , [currentUser]);
 
   return (
     <div id="wd-dashboard">
-      <div>
-        currentUser: {currentUser.firstName} {currentUser.lastName} <br />
-      </div>
       <h1 id="wd-dashboard-title">Dashboard</h1> <hr />
       {
         (currentUser.role === "STUDENT" || currentUser.role === "FACULTY") && (
