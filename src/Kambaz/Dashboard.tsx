@@ -56,6 +56,9 @@ export default function Dashboard(
 
   return (
     <div id="wd-dashboard">
+      <div>
+        {currentUser.firstName} {currentUser.lastName} <br />
+      </div>
       <h1 id="wd-dashboard-title">Dashboard</h1> <hr />
       {
         (currentUser.role === "STUDENT" || currentUser.role === "FACULTY") && (
