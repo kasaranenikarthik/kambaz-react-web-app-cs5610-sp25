@@ -48,7 +48,7 @@ export default function PeopleDetails() {
   const fetchUser = async () => { 
     if (!uid) return; 
     const user = await client.findUserById(uid); 
-    setUser(user); 
+    setUser(user);
   }; 
   
   useEffect(() => { 
@@ -63,17 +63,18 @@ export default function PeopleDetails() {
                 <IoCloseSharp className="fs-1" /> </button> 
             <div className="text-center mt-2"> <FaUserCircle className="text-secondary me-2 fs-1" /> </div><hr /> 
             <div className="text-danger fs-4 wd-name">
-                {!editing && ( 
+                {! editing && user.role !== "ADMIN" && (<div>{`${user.firstName} ${user.lastName}`}</div>)}
+                {!editing && user.role === "ADMIN" && ( 
                         <FaPencil onClick={() => setEditing(true)} 
                             className="float-end fs-5 mt-2 wd-edit" /> )} 
-                {editing && ( 
+                {editing && user.role === "ADMIN" &&  ( 
                 <FaCheck onClick={() => saveUser()} 
                     className="float-end fs-5 mt-2 me-2 wd-save" /> )} 
-                {!editing && ( 
+                {!editing && user.role === "ADMIN" && ( 
                 <div className="wd-name" 
                     onClick={() => setEditing(true)}> 
                     {user.firstName} {user.lastName}</div>)} 
-                {user && editing && ( 
+                {user && editing &&user.role === "ADMIN" && ( 
                     <FormControl className="w-50 wd-edit-name" 
                         defaultValue={`${user.firstName} ${user.lastName}`} 
                         onChange={(e) => setName(e.target.value)} 
@@ -82,15 +83,16 @@ export default function PeopleDetails() {
             </div> 
             <div>
                 <b>Email:</b> 
-                {!emailEditing && (<div>{user.email}
+                {!emailEditing && user.role !== "ADMIN" && (<div>{user.email}</div>)}
+                {!emailEditing && user.role === "ADMIN" && (<div>{user.email}
                     <FaPencil onClick={() => 
                         {   setEmail(user.email);
                             setEmailEditing(true); }} 
                         className="float-end fs-5 mt-2 wd-edit" /></div>)}  
-                {emailEditing && (<div>
+                {emailEditing && user.role === "ADMIN" && (<div>
                     <FaCheck onClick={() => saveUser()}
                         className="float-end fs-5 mt-2 me-2 wd-save" /> </div> )}
-                {emailEditing && (
+                {emailEditing && user.role === "ADMIN" && (
                     <FormControl className="wd-edit-email w-75" 
                         defaultValue={email} 
                         onChange={(e) => setEmail(e.target.value)} 
@@ -99,12 +101,13 @@ export default function PeopleDetails() {
                     )}
             </div>
             <b>Roles:</b>
-            {!roleEditing && (<div>{user.role} 
+            {!roleEditing && user.role !== "ADMIN" && (<div>{user.role}</div>)} 
+            {!roleEditing && user.role === "ADMIN" && (<div>{user.role} 
                 <FaPencil onClick={() => {setRole(user.role); setRoleEditing(true); }} 
                     className="float-end fs-5 mt-2 wd-edit" />
                 <br/>
                 </div>)}
-            {roleEditing && (<div> 
+            {roleEditing && user.role === "ADMIN" && (<div> 
                 <select value={role} onChange={(e) =>setRole(e.target.value)} onKeyDown={(e) => {if (e.key === "Enter") { saveUser(); }}} 
                     className="form-select float-start wd-select-role w-75" >    
                     <option value="STUDENT">Students</option> 
@@ -126,7 +129,9 @@ export default function PeopleDetails() {
                 <hr/>
             </div>
             
-            <button onClick={() => deleteUser(uid)} className="btn btn-danger float-end wd-delete" > Delete </button> 
+            { user.role === "ADMIN" &&
+                <button onClick={() => deleteUser(uid)} className="btn btn-danger float-end wd-delete" > Delete </button> 
+            }   
             <button onClick={() => navigate(-1)} 
               className="btn btn-secondary float-start float-end me-2 wd-cancel" > Cancel </button> 
         </div> 
