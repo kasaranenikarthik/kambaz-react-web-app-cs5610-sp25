@@ -9,11 +9,25 @@ import { Navigate, Route, Routes, useLocation, useParams } from "react-router";
 import PeopleTable from "./People/Table";
 import ProtectedAssignmentRoute from "./Assignments/ProtectedAssignmentRoute";
 import ProtectedCourseRoute from "./ProtectedCourseRoute";
+import * as coursesClient from "./client.ts";
+import { useEffect, useState } from "react";
 
 export default function Courses({courses}: {courses: any[]; }) {
   const { cid } = useParams();
   const pathname = useLocation();
   const course = courses.find((course) => course._id === cid);
+  const [users, setUsers] = useState([]);
+  const getUsersForCourse = async () => {
+    const users = await coursesClient.findUsersForCourse(cid);
+    setUsers(users);
+    return users;
+  }
+  
+  useEffect(() => {
+    getUsersForCourse();
+  }
+  , [cid]);
+
   return (
     <div id="wd-courses">
       <h2 className="text-danger">
@@ -32,7 +46,7 @@ export default function Courses({courses}: {courses: any[]; }) {
             <Route path="Modules" element={ <ProtectedCourseRoute cid={cid}> <Modules /> </ProtectedCourseRoute>} />
             <Route path="Assignments" element={<ProtectedCourseRoute cid={cid}> <Assignments /> </ProtectedCourseRoute>} />
             <Route path="Assignments/:aid" element={<ProtectedCourseRoute cid={cid}> <ProtectedAssignmentRoute><AssignmentEditor /> </ProtectedAssignmentRoute> </ProtectedCourseRoute>} />
-            <Route path="People" element={<ProtectedCourseRoute cid={cid}> <PeopleTable /> </ProtectedCourseRoute>} />
+            <Route path="People" element={<ProtectedCourseRoute cid={cid}> <PeopleTable users={users} /> </ProtectedCourseRoute>} />
             <Route path="Quizzes" element={<ProtectedCourseRoute cid={cid}> <Quizzes/> </ProtectedCourseRoute>} />
           </Routes>
         </div>
