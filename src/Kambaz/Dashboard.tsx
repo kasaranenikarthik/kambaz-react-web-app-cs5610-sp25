@@ -25,13 +25,6 @@ export default function Dashboard(
 
   const dispatch = useDispatch();
 
-  const [showAllCourses, setShowAllCourses] = useState(false);
-
-  const fetchAllCourses = async () => {
-    const courses = await courseClient.fetchAllCourses();
-    setCourses(courses);
-  };
-
   const fetchEnrolledCourses = async () => {
     const courses = await accountClient.findMyCourses();
     setCourses(courses);
@@ -44,9 +37,6 @@ export default function Dashboard(
 
   return (
     <div id="wd-dashboard">
-      <div>
-        {currentUser.firstName} {currentUser.lastName} <br />
-      </div>
       <h1 id="wd-dashboard-title">
           Dashboard
           <button onClick={() => setEnrolling(!enrolling)} className="float-end btn btn-primary" > 
