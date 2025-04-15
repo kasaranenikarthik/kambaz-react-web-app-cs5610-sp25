@@ -69,7 +69,7 @@ export default function Modules() {
               }
               {currentUser.role === "FACULTY" && (
                 <ModuleControlButtons
-                  moduleId={module._id}
+                  module={module}
                   deleteModule={removeModule}
                   editModule={saveModule}/>
               )}
