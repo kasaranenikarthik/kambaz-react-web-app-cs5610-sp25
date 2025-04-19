@@ -52,6 +52,7 @@ export default function WorkingWithArraysAsynchronously() {
     } catch (error: any) {
       setErrorMessage(error.response.data.message);
     }
+  }
 
   return (
     <div id="wd-asynchronous-arrays">
@@ -89,5 +90,5 @@ export default function WorkingWithArraysAsynchronously() {
         ))}
       </ListGroup> <hr />
     </div>
-);}
+  );
 }

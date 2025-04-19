@@ -22,6 +22,7 @@ export default function Profile() {
   const updateProfile = async () => {
     const updatedUser = await client.updateUser(profile);
     setProfile(updatedUser);
+    dispatch(setCurrentUser(updatedUser));
   };
   useEffect(() => { fetchProfile(); }, []);
   return (
@@ -43,13 +44,18 @@ export default function Profile() {
                        onChange={ (e) => setProfile({ ...profile, email: e.target.value })}/>
           <select onChange={(e) => setProfile({ ...profile, role:  e.target.value })}
                  className="form-control mb-2" id="wd-role">
-            <option value="USER">User</option>            <option value="ADMIN">Admin</option>
-            <option value="FACULTY">Faculty</option>      <option value="STUDENT">Student</option>
+            <option value="USER">User</option>            
+            <option value="ADMIN">Admin</option>
+            <option value="FACULTY">Faculty</option>      
+            <option value="STUDENT">Student</option>
           </select>
           <Button onClick={updateProfile} className="btn btn-primary w-100 mb-2"> Update </Button>
           <Button onClick={signout} className="w-100 mb-2 bg-danger" id="wd-signout-btn">
             Sign out
           </Button>
+          <div>
+              {JSON.stringify(profile, null, 2)}
+          </div>
         </div>
       )}
     </div>

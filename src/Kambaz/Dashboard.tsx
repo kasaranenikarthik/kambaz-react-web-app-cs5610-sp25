@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
 import { Row, Col, Card, Button, FormControl } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { setEnrollments, addEnrollment, deleteEnrollments } from "./enrollReducer";
+import { addEnrollment } from "./enrollReducer";
 import { v4 as uuidv4 } from "uuid";
-import { useEffect, useState } from "react";
-import * as courseClient from "./Courses/client";
+import { useEffect } from "react";
 import * as accountClient from "./Account/client";
 
 
@@ -111,4 +110,6 @@ export default function Dashboard(
           }
         </Row>
       </div>
-    </div>);}
+    </div>
+  );
+}

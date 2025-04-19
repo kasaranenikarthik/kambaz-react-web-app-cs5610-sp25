@@ -1,0 +1,30 @@
+import axios from "axios";
+
+const REMOTE_SERVER = import.meta.env.VITE_REMOTE_SERVER;
+const QUIZ_API = `${REMOTE_SERVER}/api`;
+
+const axiosWithCredentials = axios.create({
+  withCredentials: true,
+});
+
+export const getQuizzesForCourse = async (courseId: any) => {
+  const response = await axiosWithCredentials.get(`${QUIZ_API}/courses/${courseId}/quizzes`);
+  return response.data;
+};
+
+export const publishQuiz = async (cid: any, quizId: any, quiz: any) => {
+    quiz = { ...quiz, published: true };
+    const response = await axiosWithCredentials.post(`${QUIZ_API}/courses/${cid}/quiz/${quizId}/publish`, quiz);
+    return response.status;
+}
+
+export const unpublishQuiz = async (cid: any, quizId: any, quiz: any) => {
+    quiz = { ...quiz, published: false };
+    const response = await axiosWithCredentials.post(`${QUIZ_API}/courses/${cid}/quiz/${quizId}/unpublish`, quiz);
+    return response.status;
+}
+
+export const getQuestionsForQuiz = async (cid: any, quizId: any) => {
+    const response = await axiosWithCredentials.get(`${QUIZ_API}/courses/${cid}/quiz/${quizId}`)
+    return response.data;
+}

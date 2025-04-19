@@ -11,6 +11,7 @@ import ProtectedAssignmentRoute from "./Assignments/ProtectedAssignmentRoute";
 import ProtectedCourseRoute from "./ProtectedCourseRoute";
 import * as coursesClient from "./client.ts";
 import { useEffect, useState } from "react";
+import QuizDetails from "./Quizzes/quizDetails.tsx";
 
 export default function Courses({courses}: {courses: any[]; }) {
   const { cid } = useParams();
@@ -48,6 +49,7 @@ export default function Courses({courses}: {courses: any[]; }) {
             <Route path="Assignments/:aid" element={<ProtectedCourseRoute cid={cid}> <ProtectedAssignmentRoute><AssignmentEditor /> </ProtectedAssignmentRoute> </ProtectedCourseRoute>} />
             <Route path="People" element={<ProtectedCourseRoute cid={cid}> <PeopleTable users={users} /> </ProtectedCourseRoute>} />
             <Route path="Quizzes" element={<ProtectedCourseRoute cid={cid}> <Quizzes/> </ProtectedCourseRoute>} />
+            <Route path="Quizzes/:qid/details" element={<ProtectedCourseRoute cid={cid}> <QuizDetails/> </ProtectedCourseRoute>} />
           </Routes>
         </div>
       </div> 

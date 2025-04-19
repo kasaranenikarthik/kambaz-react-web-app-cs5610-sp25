@@ -29,8 +29,8 @@ export default function WorkingWithObjects() {
         Update Title
       </a>
       <FormControl className="w-75" id="wd-assignment-title"
-        defaultValue={assignment.title} onChange={() =>
-            setAssignment({ ...assignment, title: assignment.title })}/>
+        defaultValue={assignment.title} onChange={(e) =>
+            setAssignment({ ...assignment, title: e.target.value })}/>
       <hr />
         <a id="wd-update-assignment-completed"
                 className="btn btn-primary float-end"
