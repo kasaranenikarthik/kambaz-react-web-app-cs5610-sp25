@@ -28,3 +28,8 @@ export const getQuestionsForQuiz = async (cid: any, quizId: any) => {
     const response = await axiosWithCredentials.get(`${QUIZ_API}/courses/${cid}/quiz/${quizId}`)
     return response.data;
 }
+
+export const findQuizById = async (cid: any, quizId: any) => {
+    const response = await axiosWithCredentials.get(`${QUIZ_API}/courses/${cid}/quiz/${quizId}/details`)
+    return response.data;
+}
