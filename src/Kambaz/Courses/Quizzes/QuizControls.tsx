@@ -39,7 +39,6 @@ export default function QuizControlButtons({quiz}: {quiz: any; })
                             <BsThreeDotsVertical className="fs-5"/>
                         </Dropdown.Toggle>
                         <Dropdown.Menu className="text-secondary">
-                            {publish && <Dropdown.Item>Start Quiz</Dropdown.Item>}
                             {publish ? <Dropdown.Item onClick={unpublishQuiz}>Unpublish</Dropdown.Item>: <Dropdown.Item onClick={publishQuiz}>Publish</Dropdown.Item>}
                             <Dropdown.Item>Edit</Dropdown.Item>
                             <Dropdown.Item>Delete</Dropdown.Item>
