@@ -1,58 +1,54 @@
-import { FaAlignJustify } from "react-icons/fa";
-import Assignments from "./Assignments";
-import {Quizzes} from "./Quizzes";
-import AssignmentEditor from "./Assignments/Editor";
-import Home from "./Home";
-import Modules from "./Modules";
+import { Routes, Route  } from "react-router";
 import CourseNavigation from "./Navigation";
-import { Navigate, Route, Routes, useLocation, useParams } from "react-router";
+import Modules from "./Modules";
+import Home from "./Home";
+import Assignments from "./Assignments";
+import AssignmentEditor from "./Assignments/Editor";
+import { FaAlignJustify } from "react-icons/fa";
 import PeopleTable from "./People/Table";
-import ProtectedAssignmentRoute from "./Assignments/ProtectedAssignmentRoute";
+import {  useParams ,useLocation} from "react-router";
+import Quizzes from "./Quizzes";
+import QuizDetails from "./Quizzes/QuizDetails";
 import ProtectedCourseRoute from "./ProtectedCourseRoute";
-import * as coursesClient from "./client.ts";
-import { useEffect, useState } from "react";
-import QuizDetails from "./Quizzes/quizDetails.tsx";
+import QuizDetailsEditor from "./Quizzes/QuizDetailsEditor";
+import QuizQuestionsEditor from "./Quizzes/QuizQuestionEditor";
 
-export default function Courses({courses}: {courses: any[]; }) {
+
+
+
+export default function Courses({ courses }: { courses: any[]; }) {
   const { cid } = useParams();
-  const pathname = useLocation();
   const course = courses.find((course) => course._id === cid);
-  const [users, setUsers] = useState([]);
-  const getUsersForCourse = async () => {
-    const users = await coursesClient.findUsersForCourse(cid);
-    setUsers(users);
-    return users;
-  }
-  
-  useEffect(() => {
-    getUsersForCourse();
-  }
-  , [cid]);
-
-  return (
-    <div id="wd-courses">
-      <h2 className="text-danger">
+  const { pathname } = useLocation();
+    return (
+      <div id="wd-courses" >
+        <h2 className="text-danger d-flex align-items-center">
         <FaAlignJustify className="me-4 fs-4 mb-1" />
-        {course && course.name} &gt; {pathname.pathname.split("/")[4]}
-      </h2>
-      <hr />
-      <div className="d-flex">
-        <div className="d-none w-20 d-md-block">
-          <CourseNavigation />
+        {course && course.name} &gt; {pathname.split("/")[4]} </h2>
+
+        <div className="d-flex">
+          <div className="d-none w-20 d-md-block">
+            <CourseNavigation/>
+          </div>
+          <div className="flex-fill">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="Home" element={<Home/>} />
+              <Route path="Modules" element={<Modules />} />
+              <Route path="Assignments" element={<Assignments/>} />
+              <Route path="Assignments/:aid" element={<AssignmentEditor />} />
+              <Route path="People"  element={<PeopleTable />}  />
+              <Route path ="Quizzes/*" element={<ProtectedCourseRoute cid={cid}> <Quizzes/> </ProtectedCourseRoute>} />
+              <Route path="Quizzes/:qid/details" element={ <ProtectedCourseRoute cid={cid}> <QuizDetails/> </ProtectedCourseRoute>} />
+
+              <Route path="Quizzes/:qid/edit" element={<ProtectedCourseRoute cid={cid}><QuizDetailsEditor/> </ProtectedCourseRoute> } />
+              <Route path="Quizzes/new" element={<QuizDetailsEditor />} />
+              <Route path="Quizzes/:qid/preview" element={<QuizDetails />} />
+              <Route path="Quizzes/:qid/questions" element={<ProtectedCourseRoute cid={cid}><QuizQuestionsEditor /></ProtectedCourseRoute>} />
+
+            </Routes>
+          </div>
         </div>
-        <div className="flex-fill">
-          <Routes>
-            <Route path="/" element={<ProtectedCourseRoute cid={cid}> <Navigate to="Home" /> </ProtectedCourseRoute>} />
-            <Route path="Home" element={<ProtectedCourseRoute cid={cid}> <Home /> </ProtectedCourseRoute>} />
-            <Route path="Modules" element={ <ProtectedCourseRoute cid={cid}> <Modules /> </ProtectedCourseRoute>} />
-            <Route path="Assignments" element={<ProtectedCourseRoute cid={cid}> <Assignments /> </ProtectedCourseRoute>} />
-            <Route path="Assignments/:aid" element={<ProtectedCourseRoute cid={cid}> <ProtectedAssignmentRoute><AssignmentEditor /> </ProtectedAssignmentRoute> </ProtectedCourseRoute>} />
-            <Route path="People" element={<ProtectedCourseRoute cid={cid}> <PeopleTable users={users} /> </ProtectedCourseRoute>} />
-            <Route path="Quizzes" element={<ProtectedCourseRoute cid={cid}> <Quizzes/> </ProtectedCourseRoute>} />
-            <Route path="Quizzes/:qid/details" element={<ProtectedCourseRoute cid={cid}> <QuizDetails/> </ProtectedCourseRoute>} />
-          </Routes>
-        </div>
-      </div> 
-    </div>
-  );
-}
+      </div>
+  );}
+  

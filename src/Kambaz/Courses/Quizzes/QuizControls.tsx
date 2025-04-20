@@ -1,6 +1,6 @@
 import { BsBan, BsCheckCircleFill, BsThreeDotsVertical } from "react-icons/bs";
 import { useState } from "react";
-import {Button, Dropdown } from "react-bootstrap";
+import {Dropdown } from "react-bootstrap";
 import * as quizClient from "./client.ts";
 import { useSelector } from "react-redux";
 

@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import QuizComment from "./QuizComment.tsx";
 import { Link } from "react-router-dom";
 
-export function Quizzes() {
+export default function Quizzes() {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const { cid } = useParams();
   const [quizList, setQuizzes] = useState([]);
@@ -46,7 +46,6 @@ export function Quizzes() {
                   <Link to={`/Kambaz/Courses/${cid}/Quizzes/${quiz._id}/details`} className="wd-quiz-link" >
                     {quiz.title}
                   </Link>
-                  
                 <QuizControls quiz={quiz} /> 
                 <QuizComment quiz={quiz} />
               </ListGroupItem>
