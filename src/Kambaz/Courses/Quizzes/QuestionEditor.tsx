@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Question, MultipleChoiceQuestion, TrueFalseQuestion, FillInBlankQuestion } from "./QuizQuestionEditor";
 import MultipleChoiceEditor from "./QuestionTypes/MultipleChoiceEditor";
 import TrueFalseEditor from "./QuestionTypes/TrueFalseEditor";
-import FillInBlankEditor from "./QuestionTypes/FillnTheBlanksEditor";
+import FillInBlankEditor from "./QuestionTypes/FillntheBlanksEditor";
 
 interface QuestionEditorProps {
   question: Question;

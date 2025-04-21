@@ -1,4 +1,3 @@
-import React from "react";
 import { Form, Button, InputGroup, Row, Col, Card } from "react-bootstrap";
 import { MultipleChoiceQuestion } from "../QuizQuestionEditor";
 import { FaTrash, FaCheck } from "react-icons/fa";
