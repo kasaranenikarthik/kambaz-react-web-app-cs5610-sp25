@@ -1,6 +1,20 @@
 import { Form, Button, InputGroup, Row, Col, Card } from "react-bootstrap";
-import { FillInBlankQuestion } from "../QuizQuestionEditor";
 import { FaTrash } from "react-icons/fa";
+
+export interface BaseQuestion {
+  _id: string;
+  quiz: string;
+  course: string;
+  type: string;
+  question: string;
+  points: number;
+  isEditing: boolean;
+}
+
+export interface FillInBlankQuestion extends BaseQuestion {
+  type: "FILL_IN_BLANK";
+  correctAnswer: string;
+}
 
 interface FillInBlankEditorProps {
   question: FillInBlankQuestion;

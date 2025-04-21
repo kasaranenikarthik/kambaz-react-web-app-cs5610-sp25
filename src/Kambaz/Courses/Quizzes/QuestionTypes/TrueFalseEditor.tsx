@@ -1,6 +1,22 @@
 import { Form, Button, Row, Col, Card } from "react-bootstrap";
-import { TrueFalseQuestion } from "../QuizQuestionEditor";
 import { FaCheck } from "react-icons/fa";
+
+
+
+export interface BaseQuestion {
+  _id: string;
+  quiz: string;
+  course: string;
+  type: string;
+  question: string;
+  points: number;
+  isEditing: boolean;
+}
+
+export interface TrueFalseQuestion extends BaseQuestion {
+  type: "TRUE_FALSE";
+  correctAnswer: boolean;
+}
 
 interface TrueFalseEditorProps {
   question: TrueFalseQuestion;
