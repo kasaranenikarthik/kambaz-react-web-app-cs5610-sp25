@@ -1,7 +1,7 @@
 import { Button, ListGroup, ListGroupItem } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa6";
 import { useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
 import QuizControls from "./QuizControls";
 import { IoRocketOutline } from "react-icons/io5";
 import * as quizClient from "./client.ts";
@@ -61,7 +61,7 @@ export default function Quizzes() {
                     <Link to={`/Kambaz/Courses/${cid}/Quizzes/${quiz._id}/details`} className="wd-quiz-link" >
                       {quiz.title}
                     </Link>
-                  <QuizControls quiz={quiz} /> 
+                  <QuizControls quiz={quiz} setQuizzes={setQuizzes} quizList={quizList}/> 
                   <QuizComment quiz={quiz} />
                 </ListGroupItem>
               ))
@@ -79,7 +79,7 @@ export default function Quizzes() {
                       <Link to={`/Kambaz/Courses/${cid}/Quizzes/${quiz._id}/details`} className="wd-quiz-link" >
                         {quiz.title}
                       </Link>
-                    <QuizControls quiz={quiz} />
+                    <QuizControls quiz={quiz} quizList={quizList} setQuizzes={setQuizzes} />
                     <QuizComment quiz={quiz} />
                   </ListGroupItem> 
                 ) :(<></>))

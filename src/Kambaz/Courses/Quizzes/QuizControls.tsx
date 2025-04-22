@@ -3,9 +3,12 @@ import { useState } from "react";
 import {Dropdown } from "react-bootstrap";
 import * as quizClient from "./client.ts";
 import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router";
 
-export default function QuizControlButtons({quiz}: {quiz: any; })
+export default function QuizControlButtons({quiz, quizList, setQuizzes}: {quiz: any; quizList: any; setQuizzes: any})
 {
+    const { cid } = useParams();
+    const navigate = useNavigate();
     const { currentUser } = useSelector((state: any) => state.accountReducer);
     const [publish, setPublish] = useState(quiz.published);
 
@@ -27,6 +30,11 @@ export default function QuizControlButtons({quiz}: {quiz: any; })
         }
     }
 
+    const deleteQuiz = async () => {
+        await quizClient.deleteQuiz(quiz.course, quiz._id);
+        setQuizzes(quizList.filter((q: any) => q._id !== quiz._id));
+    }
+
     return (
         <div className="float-end">
             { publish ?
@@ -40,8 +48,8 @@ export default function QuizControlButtons({quiz}: {quiz: any; })
                         </Dropdown.Toggle>
                         <Dropdown.Menu className="text-secondary">
                             {publish ? <Dropdown.Item onClick={unpublishQuiz}>Unpublish</Dropdown.Item>: <Dropdown.Item onClick={publishQuiz}>Publish</Dropdown.Item>}
-                            <Dropdown.Item>Edit</Dropdown.Item>
-                            <Dropdown.Item>Delete</Dropdown.Item>
+                            <Dropdown.Item onClick={() => navigate(`/Kambaz/Courses/${cid}/Quizzes/${quiz._id}/edit`) }>Edit</Dropdown.Item>
+                            <Dropdown.Item onClick={deleteQuiz}>Delete</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
                 </div>
