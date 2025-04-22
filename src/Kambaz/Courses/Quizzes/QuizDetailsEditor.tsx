@@ -32,7 +32,8 @@ export default function QuizDetailsEditor() {
       webcam: false,
       lockQafterA: false,
       accessCode: "",
-      maxAttempts: 1
+      maxAttempts: 1,
+      for:"Everyone"
     }
   );
 
@@ -49,7 +50,7 @@ export default function QuizDetailsEditor() {
     if (qid) {
       try {
         const fetchedQuiz = await quizClient.findQuizById(cid, qid);
-        setQuiz(fetchedQuiz);
+        setQuiz({...quiz, ...fetchedQuiz});
       } catch (error) {
         console.error("Error fetching quiz:", error);
       }
@@ -82,25 +83,10 @@ export default function QuizDetailsEditor() {
     });
   };
 
-  const handleSave = async (publish = false) => {
+  const handleSave = async (cid:any, qid:any) => {
     try {
-      const updatedQuiz = {...quiz};
-      if (publish) {
-        updatedQuiz.published = true;
-      }
-      
-      // When sending to API, ensure it matches the expected type
-      if (qid) {
-        await quizClient.updateQuiz(cid, qid, updatedQuiz as any);
-      } else {
-        await quizClient.createQuiz(cid, updatedQuiz as any);
-      }
-      
-      if (publish) {
-        navigate(`/Kambaz/Courses/${cid}/Quizzes`);
-      } else {
-        navigate(`/Kambaz/Courses/${cid}/Quizzes/${qid || updatedQuiz._id}/details`);
-      }
+      await quizClient.updateQuiz(cid, qid, quiz);
+      navigate(-1);
     } catch (error) {
       console.error("Error saving quiz:", error);
     }
@@ -111,7 +97,8 @@ export default function QuizDetailsEditor() {
   };
 
   const calculateTotalPoints = () => {
-    return questions.reduce((total, question) => total + (question.points || 0), 0);
+    const total= questions.reduce((total, question) => total + (question.points || 0), 0);
+    return total;
   };
 
   return (
@@ -123,6 +110,7 @@ export default function QuizDetailsEditor() {
             id="published-switch"
             label="Published"
             checked={quiz.published}
+            disabled={true}
             onChange={(e) => setQuiz({...quiz, published: e.target.checked})}
             className="d-inline-block ms-2"
           />
@@ -252,7 +240,7 @@ export default function QuizDetailsEditor() {
                     label="Allow Multiple Attempts"
                     name="multipleAttempts"
                     checked={quiz.multipleAttempts}
-                    onChange={handleChange}
+                    onChange={(e) => setQuiz({...quiz, multipleAttempts: e.target.checked, maxAttempts:1})}
                   />
                   {quiz.multipleAttempts && (
                     <>
@@ -263,7 +251,7 @@ export default function QuizDetailsEditor() {
                         style={{width: "80px"}}
                         defaultValue={quiz.maxAttempts}
                         name="maxAttempts"
-                        onChange={(e) => setQuiz({...quiz, maxAttempts: parseInt(e.target.value)>1? parseInt(e.target.value) : 1})}
+                        onChange={(e) => setQuiz({...quiz, maxAttempts: quiz.multipleAttempts? parseInt(e.target.value) : 1})}
                       />
                       <span className="ms-2">times</span>
                     </>
@@ -302,6 +290,19 @@ export default function QuizDetailsEditor() {
                     onChange={handleChange}
                   />
                 </Form.Group>
+
+                <Form.Group className="mb-2">
+                  <Form.Check
+                    type="checkbox"
+                    id="lockdown-browser"
+                    label="Lockdown Browser Required"
+                    name="lockdownBrowser"
+                    checked={quiz.lockdownBrowser}
+                    onChange={handleChange}
+                  />
+                </Form.Group>
+
+
               </div>
 
               <div className="border rounded p-3 mb-3">
@@ -313,7 +314,7 @@ export default function QuizDetailsEditor() {
                     type="date"
                     name="due"
                     value={quiz.due}
-                    onChange={handleChange}
+                    onChange={(e) => setQuiz({...quiz, due: e.target.value})}
                   />
                 </div>
 
@@ -325,7 +326,7 @@ export default function QuizDetailsEditor() {
                         type="date"
                         name="availableFrom"
                         value={quiz.availableFrom}
-                        onChange={handleChange}
+                        onChange={(e) => setQuiz({...quiz, availableFrom: e.target.value})}
                       />
                     </div>
                   </Col>
@@ -336,7 +337,7 @@ export default function QuizDetailsEditor() {
                         type="date"
                         name="until"
                         value={quiz.until}
-                        onChange={handleChange}
+                        onChange={(e) => setQuiz({...quiz, until: e.target.value})}
                       />
                     </div>
                   </Col>
@@ -354,7 +355,7 @@ export default function QuizDetailsEditor() {
                 </Button>
                 <Button 
                   variant="danger" 
-                  onClick={() => handleSave(false)}
+                  onClick={() => handleSave(cid, qid)}
                   type="button"
                 >
                   Save

@@ -34,9 +34,32 @@ export const findQuizById = async (cid: any, quizId: any) => {
     return response.data;
 }
 
-export function updateQuiz(cid: string | undefined, qid: string, updatedQuiz: { _id: string | undefined; title: string; type: string; description: string; course: string | undefined; questions: never[]; published: boolean; points: number; assignmentGroup: string; shuffleAnswers: boolean; timeLimit: number; multipleAttempts: boolean; showCorrectAnswers: boolean; accessCode: string; oneQuestionAtATime: boolean; webcamRequired: boolean; lockQuestionsAfterAnswering: boolean; dueDate: string; availableFrom: string; availableUntil: string; createdAt: string; updatedAt: string; createdBy: { _id: number; username: string; password: string; firstName: string; lastName: string; email: string; role: string; }; }) {
-    throw new Error("Function not implemented.");
+export function updateQuiz(cid: any, quizId: any, updatedQuiz:any ) {
+    const response = axiosWithCredentials.put(`${QUIZ_API}/courses/${cid}/quiz/${quizId}`, updatedQuiz);
+    return response;
 }
-export function createQuiz(cid: string | undefined, updatedQuiz: { _id: string | undefined; title: string; type: string; description: string; course: string | undefined; questions: never[]; published: boolean; points: number; assignmentGroup: string; shuffleAnswers: boolean; timeLimit: number; multipleAttempts: boolean; showCorrectAnswers: boolean; accessCode: string; oneQuestionAtATime: boolean; webcamRequired: boolean; lockQuestionsAfterAnswering: boolean; dueDate: string; availableFrom: string; availableUntil: string; createdAt: string; updatedAt: string; createdBy: { _id: number; username: string; password: string; firstName: string; lastName: string; email: string; role: string; }; }) {
-    throw new Error("Function not implemented.");
+
+export function createQuiz(cid: any, quizId: any, newQuiz:any ) {
+    const response = axiosWithCredentials.post(`${QUIZ_API}/courses/${cid}/quiz/${quizId}`, newQuiz);
+    return response;
+}
+
+export function deleteQuiz(cid: any, quizId: any) {
+    const response = axiosWithCredentials.delete(`${QUIZ_API}/courses/${cid}/quiz/${quizId}`);
+    return response;
+}
+
+export function createQuestion(cid: any, quizId: any, newQuestion:any ) {
+    const response = axiosWithCredentials.post(`${QUIZ_API}/courses/${cid}/quiz/${quizId}/questions`, newQuestion);
+    return response;
+}
+
+export function updateQuestion(cid: any, quizId: any, questionId: any, updatedQuestion:any ) {
+    const response = axiosWithCredentials.put(`${QUIZ_API}/courses/${cid}/quiz/${quizId}/questions/${questionId}`, updatedQuestion);
+    return response;
+}
+
+export function deleteQuestion(cid: any, quizId: any, questionId: any) {
+    const response = axiosWithCredentials.delete(`${QUIZ_API}/courses/${cid}/quiz/${quizId}/questions/${questionId}`);
+    return response;
 }

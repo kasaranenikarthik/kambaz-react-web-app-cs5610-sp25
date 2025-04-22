@@ -86,10 +86,10 @@ export default function QuizDetails()
         <h1 className="mb-5">{quiz.title}</h1>
         <div id="wd-details" className="ms-5 mt-3 mb-5 w-50">
           <div className="row mt-2">
-            <div className="col-7">
+            <div className="col-9">
               <b>Quiz Type</b>
             </div>
-            <div className="col-7">
+            <div className="col-3">
               { (quiz.type === "GRADEDQUIZ" && "Graded Quiz")
                 || (quiz.type === "PRACTICEQUIZ" && "Practice Quiz") 
                 || (quiz.type === "GRADEDSURVEY" && "Graded Survey") 

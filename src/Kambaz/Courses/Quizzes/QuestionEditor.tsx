@@ -6,7 +6,6 @@ import FillInBlankEditor from "./QuestionTypes/FillntheBlanksEditor";
 
 interface QuestionEditorProps {
   question: Question;
-  index: number;
   onEdit: () => void;
   onSave: (question: Question) => void;
   onCancel: () => void;
@@ -15,7 +14,6 @@ interface QuestionEditorProps {
 
 export default function QuestionEditor({
   question,
-  index,
   onEdit,
   onSave,
   onCancel,
@@ -60,6 +58,7 @@ export default function QuestionEditor({
             onChange={updatedQuestion => setEditedQuestion(updatedQuestion)}
             onCancel={onCancel}
             onSave={handleSave}
+            onDelete={onDelete}
           />
         );
       

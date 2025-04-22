@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Button, Nav, Tab, Container, Alert } from "react-bootstrap";
+import { Button, Nav, Tab, Container, Alert, Form } from "react-bootstrap";
 import * as quizClient from "./client.ts";
 import QuestionEditor from "./QuestionEditor.tsx";
+import { v4 as uuidv4 } from "uuid";
+import { FaTrash } from "react-icons/fa6";
 
 // Question type definitions
 export interface BaseQuestion {
@@ -37,12 +39,12 @@ export type Question = MultipleChoiceQuestion | TrueFalseQuestion | FillInBlankQ
 // Full Quiz interface that matches what the API expects
 interface Quiz {
   _id: string,
-  course: string ,
-  description:string,
+  course: string,
+  description: string,
   title: string,
   published: boolean,
   due: string,
-  type:string,
+  type: string,
   availableFrom: string,
   until: string,
   points: number,
@@ -66,6 +68,9 @@ export default function QuizQuestionsEditor() {
   const navigate = useNavigate();
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const [saveStatus, setSaveStatus] = useState<{ type: string; message: string } | null>(null);
+  
+  // Add state for new question type selection
+  const [newQuestionType, setNewQuestionType] = useState<string>("MULTIPLE_CHOICE");
   
   const [questions, setQuestions] = useState<Question[]>([]);
 
@@ -137,38 +142,65 @@ export default function QuizQuestionsEditor() {
     getQuiz();
   }, [qid, cid]);
 
-  const handleAddQuestion = () => {
-    const newQuestion: MultipleChoiceQuestion = {
-      type: "MULTIPLE_CHOICE",
-      question: "New question",
-      _id: "",
-      quiz: qid || "",
-      course: cid || "",
-      points: 1,
-      isEditing: true,
-      options: [{ text: ""}, { text: ""}, { text: ""}, { text: ""}],
-      correctAnswer: ""
-    };
+  // Updated to use the selected new question type
+  const handleAddQuestion = async () => {
+    let newQuestion: Question;
+    
+    // Create a new question based on the selected type
+    if (newQuestionType === "MULTIPLE_CHOICE") {
+      newQuestion = {
+        type: "MULTIPLE_CHOICE",
+        question: "New question",
+        _id: uuidv4(),
+        quiz: qid || "",
+        course: cid || "",
+        points: 1,
+        isEditing: true,
+        options: [{ text: ""}, { text: ""}, { text: ""}, { text: ""}],
+        correctAnswer: ""
+      } as MultipleChoiceQuestion;
+    } else if (newQuestionType === "TRUE_FALSE") {
+      newQuestion = {
+        type: "TRUE_FALSE",
+        question: "New question",
+        _id: uuidv4(),
+        quiz: qid || "",
+        course: cid || "",
+        points: 1,
+        isEditing: true,
+        correctAnswer: false
+      } as TrueFalseQuestion;
+    } else {
+      newQuestion = {
+        type: "FILL_IN_BLANK",
+        question: "New question",
+        _id: uuidv4(),
+        quiz: qid || "",
+        course: cid || "",
+        points: 1,
+        isEditing: true,
+        correctAnswer: ""
+      } as FillInBlankQuestion;
+    }
+    await quizClient.createQuestion(cid, qid, newQuestion);
     setQuestions([...questions, newQuestion]);
+  };
+
+  const handleSaveQuestion = async (questionId: any, updatedQuestion: Question) => {
+    updatedQuestion.isEditing = false;
+    const q = questions.map((q) => { if (q._id === questionId) return updatedQuestion; return q; });
+    setQuestions(q);
+    await quizClient.updateQuestion(cid, qid, questionId, updatedQuestion);
+    setSaveStatus({
+      type: "success",
+      message: "Question updated successfully!"
+    });
+    setTimeout(() => { setSaveStatus(null);}, 3000);
   };
 
   const handleEditQuestion = (questionId: any) => {
     const q = questions.map((q) => { if (q._id === questionId) q.isEditing = true; return q; });
     setQuestions(q);
-  };
-
-  const handleSaveQuestion = (questionId: any, updatedQuestion: Question) => {
-    updatedQuestion.isEditing = false;
-    const q = questions.map((q) => { if (q._id === questionId) return updatedQuestion; return q; });
-    setQuestions(q);
-
-    setSaveStatus({
-      type: "success",
-      message: "Question updated successfully!"
-    });
-
-    // Clear the status message after 3 seconds
-    setTimeout(() => { setSaveStatus(null);}, 3000);
   };
 
   const handleCancelEdit = (questionId: any) => {
@@ -179,16 +211,11 @@ export default function QuizQuestionsEditor() {
   const handleDeleteQuestion = (questionId: any) => {
     const q = questions.filter((q) => q._id !== questionId);
     setQuestions(q);
-
     setSaveStatus({
       type: "warning",
       message: "Question deleted."
     });
-
-    // Clear the status message after 3 seconds
-    setTimeout(() => {
-      setSaveStatus(null);
-    }, 3000);
+    setTimeout(() => {setSaveStatus(null);}, 3000);
   };
 
   const calculateTotalPoints = () => {
@@ -205,6 +232,7 @@ export default function QuizQuestionsEditor() {
       // Get the original quiz from the API first
       const originalQuiz = await quizClient.findQuizById(cid, qid);    
       // Merge the updated questions into the original quiz
+      //alert(calculateTotalPoints() + " points");
       const updatedQuiz = {
         ...originalQuiz,
         points: calculateTotalPoints()
@@ -274,18 +302,31 @@ export default function QuizQuestionsEditor() {
         <Tab.Content>
           <Tab.Pane eventKey="questions">
             <div className="text-center mb-4">
-              <Button 
-                variant="outline-secondary" 
-                className="px-4 py-2"
-                onClick={handleAddQuestion}
-              >
-                + New Question
-              </Button>
+              {/* Question type dropdown next to New Question button */}
+              <div className="d-flex justify-content-center align-items-center">
+                <Form.Select 
+                  value={newQuestionType}
+                  onChange={(e) => setNewQuestionType(e.target.value)}
+                  className="me-3"
+                  style={{ width: "200px" }}
+                >
+                  <option value="MULTIPLE_CHOICE">Multiple Choice</option>
+                  <option value="TRUE_FALSE">True/False</option>
+                  <option value="FILL_IN_BLANK">Fill in the Blank</option>
+                </Form.Select>
+                <Button 
+                  variant="outline-secondary" 
+                  className="px-4 py-2"
+                  onClick={handleAddQuestion}
+                >
+                  + New Question
+                </Button>
+              </div>
             </div>
 
             {questions.length === 0 ? (
               <Alert variant="info">
-                This quiz doesn't have any questions yet. Click "New Question" to add one.
+                This quiz doesn't have any questions yet. Select a question type and click "New Question" to add one.
               </Alert>
             ) : (
               <div className="wd-questions-list">
@@ -294,7 +335,6 @@ export default function QuizQuestionsEditor() {
                     {question.isEditing ? (
                       <QuestionEditor
                         question={question}
-                        index={index}
                         onEdit={() => {}} // Not needed in edit mode
                         onSave={(updatedQuestion) => handleSaveQuestion(question._id, updatedQuestion)}
                         onCancel={() => handleCancelEdit(question._id)}
@@ -308,16 +348,25 @@ export default function QuizQuestionsEditor() {
                             <span className="badge bg-secondary">{question.points} pts</span>
                             <span className="ms-2 fw-bold">{question.question}</span>
                           </div>
-                          <Button 
-                            variant="outline-primary" 
-                            size="sm"
-                            onClick={() => handleEditQuestion(question._id)}
-                          >
-                            Edit
-                          </Button>
+                          <div className="d-flex align-items-center">
+                            <div className="me-3">
+                              <Form.Select disabled style={{ width: "200px" }}>
+                                <option>{question.type === "MULTIPLE_CHOICE" ? "Multiple Choice" : 
+                                         question.type === "TRUE_FALSE" ? "True/False" : 
+                                         "Fill in the Blank"}</option>
+                              </Form.Select>
+                            </div>
+                            <Button 
+                              variant="outline-primary" 
+                              size="sm"
+                              onClick={() => handleEditQuestion(question._id)}
+                            >
+                              Edit
+                            </Button>
+                            <FaTrash className="text-danger ms-2" onClick={() => handleDeleteQuestion(question._id)}/>
+                          </div>
                         </div>
                         <div className="question-content">
-                          {/* Simple preview based on question type */}
                           {question.type === "MULTIPLE_CHOICE" && (
                             <div className="ms-3">
                               Multiple choice question with {(question as MultipleChoiceQuestion).options.length} options
