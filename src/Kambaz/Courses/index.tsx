@@ -13,6 +13,7 @@ import ProtectedCourseRoute from "./ProtectedCourseRoute";
 import QuizDetailsEditor from "./Quizzes/QuizDetailsEditor";
 import QuizQuestionsEditor from "./Quizzes/QuizQuestionEditor";
 import QuizPreview from "./Quizzes/QuizPreview";
+import QuizAttempt from "./Quizzes/QuizAttempt";
 
 
 
@@ -44,6 +45,7 @@ export default function Courses({ courses }: { courses: any[]; }) {
               <Route path="Quizzes/:qid/edit" element={<ProtectedCourseRoute cid={cid}><QuizDetailsEditor/> </ProtectedCourseRoute> } />
               <Route path="Quizzes/new" element={<QuizDetailsEditor />} />
               <Route path="Quizzes/:qid/preview" element={<QuizPreview />} />
+              <Route path="Quizzes/:qid/attempt/:attemptId" element={<QuizAttempt />} />
               <Route path="Quizzes/:qid/questions" element={<ProtectedCourseRoute cid={cid}><QuizQuestionsEditor /></ProtectedCourseRoute>} />
 
             </Routes>

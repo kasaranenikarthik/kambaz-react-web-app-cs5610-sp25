@@ -1,13 +1,14 @@
 import { Button, ListGroup, ListGroupItem } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa6";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import QuizControls from "./QuizControls";
 import { IoRocketOutline } from "react-icons/io5";
 import * as quizClient from "./client.ts";
 import { useEffect, useState } from "react";
 import QuizComment from "./QuizComment.tsx";
 import { Link } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
 
 export default function Quizzes() {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
@@ -30,10 +31,23 @@ export default function Quizzes() {
       <div id="input-group" className="d-flex justify-content-end">
         <input className="rounded-3 me-2 fs-5" placeholder="🔍 Search for Quiz" id="wd-search-quiz" />
         { currentUser.role === "FACULTY" && (
-          <Button className="btn btn-danger btn-lg me-2" id="wd-add-quiz">
-            <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
+          <Button className="btn btn-danger btn-lg me-2" id="wd-add-quiz" onClick={
+            async () => {
+              const qu = {
+                _id: uuidv4(),
+                title: "New Quiz",
+                course: cid,
+                published: false,
+                description: "New Quiz"
+              };
+              await quizClient.createQuiz(cid, qu._id, qu);
+              setQuizzes([...quizList, qu] as any);
+            }
+          }>
+          <FaPlus className="position-relative me-2" />
             Quiz
-          </Button>)
+          </Button>          
+          )
         }
       </div>
       <h3 className="bg-secondary ps-2 mt-2 rounded-1 fw-bold dropdown-toggle w-100">Quizzes

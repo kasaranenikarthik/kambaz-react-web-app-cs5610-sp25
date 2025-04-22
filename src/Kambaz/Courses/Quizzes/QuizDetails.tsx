@@ -5,9 +5,12 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Button } from "react-bootstrap";
 import * as quizClient from "./client.ts";
+import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
 
 export default function QuizDetails()
 {
+  const navigate = useNavigate();
   const { cid, qid } = useParams();
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const [quiz, setQuiz] = useState({
@@ -53,11 +56,13 @@ export default function QuizDetails()
       </h2>
       {currentUser.role === "STUDENT" && (
         <div className="wd-quiz-details-actions d-flex justify-content-center">
-          <Link to={`/Kambaz/Courses/${cid}/Quizzes/${qid}/attempt`}>
-            <Button variant="primary" className="wd-btn-primary">
-              Attempt Quiz
-            </Button>
-          </Link>
+          <Button variant="primary" className="wd-btn-primary" onClick={async (e) => {
+            e.preventDefault();
+            //const attemptId = await quizClient.createAttempt(cid, qid, currentUser)
+            const attemptId = uuidv4();
+            navigate(`/Kambaz/Courses/${cid}/Quizzes/${qid}/attempt/${attemptId}`);}}>
+            Attempt Quiz
+          </Button>
         </div>
       )}
       {
