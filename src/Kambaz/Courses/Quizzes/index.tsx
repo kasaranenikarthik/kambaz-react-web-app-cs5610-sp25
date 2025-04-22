@@ -38,21 +38,41 @@ export default function Quizzes() {
       </div>
       <h3 className="bg-secondary ps-2 mt-2 rounded-1 fw-bold dropdown-toggle w-100">Quizzes
       </h3>
-      <div className="wd-quiz-list">
-        <ListGroup className="list-group">
-          { quizList.map((quiz: any) => (
-              <ListGroupItem className="list-group-item">
-                  <IoRocketOutline className="text-success me-2 fs-5" />
-                  <Link to={`/Kambaz/Courses/${cid}/Quizzes/${quiz._id}/details`} className="wd-quiz-link" >
-                    {quiz.title}
-                  </Link>
-                <QuizControls quiz={quiz} /> 
-                <QuizComment quiz={quiz} />
-              </ListGroupItem>
-            ))
-          }
-        </ListGroup>
-      </div>
+      { currentUser.role === "FACULTY" && (
+        <div className="wd-quiz-list">
+          <ListGroup className="list-group">
+            { quizList.map((quiz: any) => (
+                <ListGroupItem className="list-group-item">
+                    <IoRocketOutline className="text-success me-2 fs-5" />
+                    <Link to={`/Kambaz/Courses/${cid}/Quizzes/${quiz._id}/details`} className="wd-quiz-link" >
+                      {quiz.title}
+                    </Link>
+                  <QuizControls quiz={quiz} /> 
+                  <QuizComment quiz={quiz} />
+                </ListGroupItem>
+              ))
+            }
+          </ListGroup>
+        </div>)
+      }
+      {
+        currentUser.role === "STUDENT" && (
+          <div className="wd-quiz-list">
+            <ListGroup className="list-group">
+              { quizList.map((quiz: any) => quiz.published ? (
+                  <ListGroupItem className="list-group-item">
+                      <IoRocketOutline className="text-success me-2 fs-5" />
+                      <Link to={`/Kambaz/Courses/${cid}/Quizzes/${quiz._id}/details`} className="wd-quiz-link" >
+                        {quiz.title}
+                      </Link>
+                    <QuizControls quiz={quiz} />
+                    <QuizComment quiz={quiz} />
+                  </ListGroupItem> 
+                ) :(<></>))
+              }
+            </ListGroup>
+          </div>)
+      }
     </div>
   );
 }
