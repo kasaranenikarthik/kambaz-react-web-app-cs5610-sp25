@@ -208,9 +208,10 @@ export default function QuizQuestionsEditor() {
     setQuestions(q);
   };
 
-  const handleDeleteQuestion = (questionId: any) => {
+  const handleDeleteQuestion = async (questionId: any) => {
     const q = questions.filter((q) => q._id !== questionId);
     setQuestions(q);
+    await quizClient.deleteQuestion(cid, qid, questionId);
     setSaveStatus({
       type: "warning",
       message: "Question deleted."

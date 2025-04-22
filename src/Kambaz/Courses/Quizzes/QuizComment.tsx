@@ -17,7 +17,7 @@ export default function QuizControlButtons({quiz}: {quiz: any; })
     return (
         <div>
             <span className="wd-assigment-info d-block mt-1 ps-5">
-                Multiple Modules | <b>Not available until</b> {quiz.available} | <b>Due</b> {quiz.due} | {quiz.points} pts | {q && q.length} Questions
+            {q && q.length} <b>Questions </b> | <b>Not available until</b> {quiz.availableFrom} | <b>Due</b> {quiz.due} | {quiz.points} pts
             </span>
         </div> 
     );
