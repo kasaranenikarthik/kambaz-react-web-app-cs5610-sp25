@@ -9,6 +9,7 @@ import { setModules, addModule, updateModule, deleteModule } from "./reducer";
 import { useSelector, useDispatch } from "react-redux";
 import * as coursesClient from "../client";
 import * as modulesClient from "./client";
+import YouTubePickerModal from "../../YouTube/YouTubePickerModal";
 
 export default function Modules() {
   const { cid } = useParams();
@@ -16,6 +17,31 @@ export default function Modules() {
   const { modules } = useSelector((state: any) => state.modulesReducer);
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const [selectedLessonId, setSelectedLessonId] = useState<string | null>(null);
+  const [showYouTubeModal, setShowYouTubeModal] = useState(false);
+
+  const handleVideoAttach = async (video: any) => {
+    const module = modules.find((m: any) => m.lessons?.some((l: any) => l._id === selectedLessonId));
+    if (!module || !selectedLessonId) return;
+    const updatedLessons = module.lessons.map((lesson: any) =>
+      lesson._id === selectedLessonId
+        ? {
+            ...lesson,
+            youTubeId: video.id.videoId,
+            youTubeTitle: video.snippet.title,
+            youTubeThumbnail: video.snippet.thumbnails?.default?.url,
+          }
+        : { ...lesson } // ensure clean copy
+    );
+    const updatedModule = {
+      ...module,
+      lessons: updatedLessons}
+    await modulesClient.updateModule(updatedModule);
+    dispatch(updateModule(updatedModule));
+    setShowYouTubeModal(false);
+  };
+
+
 
   const fetchModulesForCourse = async () => {
     const modules = await coursesClient.findModulesForCourse(cid as string);
@@ -77,9 +103,29 @@ export default function Modules() {
             {module.lessons && (
               <ListGroup className="wd-lessons rounded-0">
                 {module.lessons.map((lesson: any) => (
-                  <ListGroup.Item className="wd-lesson p-3 ps-1">
+                  <ListGroup.Item
+                    key={lesson._id}
+                    className="wd-lesson p-3 ps-1 d-flex align-items-center"
+                  >
                     <BsGripVertical className="me-2 fs-3" />
-                    {lesson.name} <LessonControlButtons />
+                    <span>{lesson.name}</span>
+                    {lesson.youTubeId && (
+                      <a
+                        className="btn btn-sm btn-primary ms-2"
+                        href={`https://www.youtube.com/watch?v=${lesson.youTubeId}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Watch Video
+                      </a>
+                    )}
+                    <LessonControlButtons
+                       isFaculty={currentUser.role === "FACULTY"}
+                      onAttachYouTube={() => {
+                        setSelectedLessonId(lesson._id);
+                        setShowYouTubeModal(true);
+                      }}
+                    />
                   </ListGroup.Item>
                 ))}
               </ListGroup>
@@ -87,6 +133,11 @@ export default function Modules() {
           </ListGroup.Item>
         ))}
       </ListGroup>
+      <YouTubePickerModal
+        show={showYouTubeModal}
+        onHide={() => setShowYouTubeModal(false)}
+        onVideoSelect={handleVideoAttach}
+      />
     </div>
   );
 }

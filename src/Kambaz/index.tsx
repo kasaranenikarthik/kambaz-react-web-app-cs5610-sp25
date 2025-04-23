@@ -11,6 +11,8 @@ import { useState } from "react";
 import ProtectedRoute from "./Account/ProtectedRoute";
 import { useSelector } from "react-redux";
 import Session from "./Account/Session";
+import YouTubeVideoSearch from "./YouTube/search";
+import YouTubeVideoDetails from "./YouTube/details";
 
 export default function Kambaz() {
   const [courses, setCourses] = useState<any[]>([]);
@@ -127,6 +129,9 @@ export default function Kambaz() {
               <Route path="Courses/:cid/*" element={<ProtectedRoute><Courses courses={courses} /></ProtectedRoute>} />
               <Route path="/Calendar" element={<h1>Calendar</h1>} />
               <Route path="/Inbox" element={<h1>Inbox</h1>} />
+              <Route path="YouTube" element={<YouTubeVideoSearch />} />
+              <Route path="YouTube/details/:videoId" element={<YouTubeVideoDetails />} />
+              <Route path="YouTube/:search" element={<YouTubeVideoSearch />} />
             </Routes>
           </div>
       </div>
