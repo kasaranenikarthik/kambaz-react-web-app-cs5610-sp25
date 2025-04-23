@@ -63,3 +63,18 @@ export function deleteQuestion(cid: any, quizId: any, questionId: any) {
     const response = axiosWithCredentials.delete(`${QUIZ_API}/courses/${cid}/quiz/${quizId}/questions/${questionId}`);
     return response;
 }
+
+export const findQuizAttemptById = async (cid: any, quizId: any, userId: any) => {
+    const attempt = await axiosWithCredentials.get(`${QUIZ_API}/courses/${cid}/quiz/${quizId}/attempts/${userId}`);
+    return attempt.data;
+}
+
+export const createAttempt = async (cid: any, quizId: any, attempt: any) => {
+    const response = await axiosWithCredentials.post(`${QUIZ_API}/courses/${cid}/quiz/${quizId}/attempts`, attempt);
+    return response.data;
+}
+
+export const updateAttempt = async (cid: any, quizId: any, attemptId: any, attempt: any) => {
+    const response = await axiosWithCredentials.put(`${QUIZ_API}/courses/${cid}/quiz/${quizId}/attempts/${attemptId}`, attempt);
+    return response.data;
+}

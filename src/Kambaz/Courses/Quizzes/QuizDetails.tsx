@@ -12,6 +12,10 @@ export default function QuizDetails()
 {
   const navigate = useNavigate();
   const { cid, qid } = useParams();
+  const [attempt, setAttempt] = useState({
+    _id: "",
+    attemptNo: 0
+  });
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const [quiz, setQuiz] = useState({
     _id: 0,
@@ -45,8 +49,22 @@ export default function QuizDetails()
     setQuiz(quiz);
   }
 
+  const getQuizAttempt = async () => {
+    const quizAttempt = await quizClient.findQuizAttemptById(cid, qid, currentUser._id);
+    console.log(quizAttempt);
+    if (quizAttempt === null || quizAttempt === undefined || quizAttempt.length === 0) {
+      setAttempt({_id : "none", attemptNo: 0});
+      return;
+    }
+    else {
+      setAttempt(quizAttempt[0]);
+    }
+  }
+
+
   useEffect(() => {
     getQuiz();
+    getQuizAttempt();
   }, []);
 
   return (
@@ -56,13 +74,48 @@ export default function QuizDetails()
       </h2>
       {currentUser.role === "STUDENT" && (
         <div className="wd-quiz-details-actions d-flex justify-content-center">
-          <Button variant="primary" className="wd-btn-primary" onClick={async (e) => {
-            e.preventDefault();
-            //const attemptId = await quizClient.createAttempt(cid, qid, currentUser)
-            const attemptId = uuidv4();
-            navigate(`/Kambaz/Courses/${cid}/Quizzes/${qid}/attempt/${attemptId}`);}}>
-            Attempt Quiz
-          </Button>
+          { attempt._id === "none" &&
+            ( 
+              <Button variant="primary" className="wd-btn-primary" onClick={async (e) => {
+                e.preventDefault();
+                const attemptId = uuidv4();
+                const newAttempt = {
+                  _id: attemptId,
+                  quiz: qid,
+                  user: currentUser._id,
+                  course: cid,
+                  answers:[],
+                  score: 0,
+                  completed: false,
+                  attemptNo: 0,
+                };
+                setAttempt(newAttempt);
+                await quizClient.createAttempt(cid, qid, newAttempt);
+                navigate(`/Kambaz/Courses/${cid}/Quizzes/${qid}/attempt/${attemptId}`);}}>
+                Attempt Quiz
+              </Button>
+            )
+          }
+          { attempt._id !== "none" && attempt.attemptNo < quiz.maxAttempts &&
+            ( 
+              <Button variant="primary" className="wd-btn-primary me-2" onClick={async (e) => {
+                e.preventDefault();
+                const quizAttempt = await quizClient.findQuizAttemptById(cid, qid, currentUser._id);
+                const attemptId = quizAttempt[0]._id;
+                navigate(`/Kambaz/Courses/${cid}/Quizzes/${qid}/attempt/${attemptId}`);}}>
+                Attempt Quiz
+              </Button>
+            )
+          }
+          { attempt._id !== "none" &&
+            <Button variant="secondary" className="wd-btn-primary me-2" onClick={async (e) => {
+              e.preventDefault();
+              const quizAttempt = await quizClient.findQuizAttemptById(cid, qid, currentUser._id);
+              navigate(`/Kambaz/Courses/${cid}/Quizzes/${qid}/results/${quizAttempt[0]._id}`);
+            }}>
+              View Results
+            </Button>
+          }
         </div>
       )}
       {
