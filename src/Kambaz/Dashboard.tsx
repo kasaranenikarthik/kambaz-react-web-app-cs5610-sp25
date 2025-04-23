@@ -24,13 +24,13 @@ export default function Dashboard(
 
   const dispatch = useDispatch();
 
-  const fetchEnrolledCourses = async () => {
-    const courses = await accountClient.findMyCourses();
+  const fetchEnrolledCourses = async (userId: any) => {
+    const courses = await accountClient.findCoursesForUser(userId);
     setCourses(courses);
   };
 
   useEffect(() => {
-    fetchEnrolledCourses();
+    fetchEnrolledCourses(currentUser._id);
   }
   , [currentUser]);
 
