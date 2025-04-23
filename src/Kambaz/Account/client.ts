@@ -38,8 +38,8 @@ export const updateUser = async (user: any) => {
     return response.data;
 };
 
-export const profile = async () => {
-    const response = await axiosWithCredentials.post(`${USERS_API}/profile`);
+export const profile = async (userId: any) => {
+    const response = await axiosWithCredentials.post(`${USERS_API}/${userId}/profile`);
     return response.data;
   };
 
@@ -80,5 +80,10 @@ export const findUserById = async (uid: string) => {
 
   export const deleteUser = async (uid: string) => {
     const response = await axiosWithCredentials.delete(`${USERS_API}/${uid}`);
+    return response.data;
+  }
+
+  export const createUser = async (user: any) => {
+    const response = await axiosWithCredentials.post(USERS_API, user);
     return response.data;
   }
