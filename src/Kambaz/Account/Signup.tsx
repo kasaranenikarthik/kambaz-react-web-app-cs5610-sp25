@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FormControl } from "react-bootstrap";
+import { Button, FormControl } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { setCurrentUser } from "./reducer";
@@ -13,6 +13,10 @@ export default function Signup() {
         dispatch(setCurrentUser(currentUser));
         navigate("/Kambaz/Account/Profile");
     }
+
+    const signin = async () => {
+        navigate("/Kambaz/Account/Signin");
+    }
     return (
         <div className="wd-signup-screen">
         <h1>Sign up</h1>
@@ -21,7 +25,7 @@ export default function Signup() {
         <FormControl value={user.password} onChange={(e) => setUser({ ...user, password: e.target.value })}
                className="wd-password mb-2" placeholder="password" type="password"/>
         <button onClick={signup} className="wd-signup-btn btn btn-primary mb-2 w-100"> Sign up </button><br />
-        <Link to="/Kambaz/Account/Signin" className="wd-signin-link">Sign in</Link>
+        <button onClick={signin} className="wd-signup-btn btn btn-primary mt-2 w-100"> Sign in </button><br />
       </div>
     );
 }

@@ -15,6 +15,9 @@ export default function Signin() {
     dispatch(setCurrentUser(user));
     navigate("/Kambaz/Dashboard");
   };
+  const signup = () => {
+    navigate("/Kambaz/Account/Signup");
+  }
   return (
     <div id="wd-signin-screen">
       <h1>Sign in</h1>
@@ -25,6 +28,6 @@ export default function Signin() {
              onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
              className="mb-2" placeholder="password" type="password" id="wd-password" />
       <Button onClick={signin} id="wd-signin-btn" className="w-100" > Sign in </Button>
-      <Link id="wd-signup-link" to="/Kambaz/Account/Signup"> Sign up </Link>
+      <Button onClick={signup} id="wd-signup-btn" className="w-100 mt-2"> Sign up</Button>
     </div>
 );}
