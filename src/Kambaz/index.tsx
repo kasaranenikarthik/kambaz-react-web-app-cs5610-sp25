@@ -2,7 +2,7 @@ import Account from "./Account";
 import { useEffect } from "react";
 import * as userClient from "./Account/client";
 import * as courseClient from "./Courses/client";
-import { Navigate, Route, Routes } from "react-router";
+import { Navigate, Route, Routes, useNavigate } from "react-router";
 import Dashboard from "./Dashboard";
 import KambazNavigation from "./Navigation";
 import Courses from "./Courses";
@@ -18,6 +18,7 @@ export default function Kambaz() {
   const [courses, setCourses] = useState<any[]>([]);
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const [enrolling, setEnrolling] = useState<boolean>(false); 
+  const navigate = useNavigate();
  
   const findCoursesForUser = async () => { 
    try { 
@@ -92,6 +93,9 @@ export default function Kambaz() {
   }
 
   useEffect(() => { 
+    if(!currentUser){
+      navigate("/Kambaz/Account/Signin");
+    }
     if (enrolling) { 
       fetchCourses(); 
     } else { 
