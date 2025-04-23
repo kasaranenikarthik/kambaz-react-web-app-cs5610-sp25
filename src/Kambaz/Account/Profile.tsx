@@ -38,7 +38,7 @@ export default function Profile() {
                        onChange={(e) => setProfile({ ...profile, firstName: e.target.value })}/>
           <FormControl defaultValue={profile.lastName} id="wd-lastname" className="mb-2"
                        onChange={(e) => setProfile({ ...profile, lastName:  e.target.value })}/>
-          <FormControl defaultValue={profile.dob} id="wd-dob" className="mb-2"
+          <FormControl defaultValue={String(profile.dob).split("T")[0]} id="wd-dob" className="mb-2"
                        onChange={(e) => setProfile({ ...profile, dob: e.target.value })} type="date"/>
           <FormControl defaultValue={profile.email} id="wd-email" className="mb-2"
                        onChange={ (e) => setProfile({ ...profile, email: e.target.value })}/>
