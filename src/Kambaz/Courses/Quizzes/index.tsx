@@ -22,6 +22,18 @@ export default function Quizzes() {
     return quizzes;
   }
 
+  const Availability = (quiz: any) => {
+    const currentDate = new Date();
+    const availableFrom = new Date(quiz.availableFrom);
+    const availableUntil = new Date(quiz.availableUntil);
+
+    if (currentDate < availableFrom || currentDate > availableUntil) {
+        return false;
+    } else{
+        return true;
+    }
+}
+
   useEffect(() => {
     fetchQuizzes();
   }, [cid]);
@@ -60,11 +72,11 @@ export default function Quizzes() {
             { quizList.map((quiz: any) => (
                 <ListGroupItem className="list-group-item">
                     <IoRocketOutline className="text-success me-2 fs-5" />
-                    <Link to={`/Kambaz/Courses/${cid}/Quizzes/${quiz._id}/details`} className="wd-quiz-link" >
-                      {quiz.title}
-                    </Link>
-                  <QuizControls quiz={quiz} setQuizzes={setQuizzes} quizList={quizList}/> 
-                  <QuizComment quiz={quiz} />
+                      <Link to={`/Kambaz/Courses/${cid}/Quizzes/${quiz._id}/details`} className="wd-quiz-link">
+                          {quiz.title}
+                      </Link>
+                    <QuizControls quiz={quiz} setQuizzes={setQuizzes} quizList={quizList}/> 
+                    <QuizComment quiz={quiz} />
                 </ListGroupItem>
               ))
             }
@@ -78,9 +90,11 @@ export default function Quizzes() {
               { quizList.map((quiz: any) => quiz.published ? (
                   <ListGroupItem className="list-group-item">
                       <IoRocketOutline className="text-success me-2 fs-5" />
-                      <Link to={`/Kambaz/Courses/${cid}/Quizzes/${quiz._id}/details`} className="wd-quiz-link" >
-                        {quiz.title}
-                      </Link>
+                      <Button disabled={!Availability(quiz)} onClick={() => {
+                          navigate(`/Kambaz/Courses/${cid}/Quizzes/${quiz._id}/details`);
+                        }} className="link bg-white text-decoration-underline text-dark border-0 fw-bold fs-5 p-1">
+                          {quiz.title}
+                      </Button>
                     <QuizControls quiz={quiz} quizList={quizList} setQuizzes={setQuizzes} />
                     <QuizComment quiz={quiz} />
                   </ListGroupItem> 
