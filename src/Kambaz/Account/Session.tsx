@@ -1,26 +1,19 @@
-import * as client from "./client";
 import { useEffect, useState } from "react";
-import { setCurrentUser } from "./reducer";
-import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 
 export default function Session({ children }: { children: any }) {
-  const [pending, setPending] = useState(true);
-  const dispatch = useDispatch();
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-
-  const fetchProfile = async () => {
-    try {
-      const currentUserProfile = await client.profile(currentUser._id);
-      dispatch(setCurrentUser(currentUserProfile));
-    } catch (err: any) {
-      console.error(err);
+  const [pending, setPending] = useState(true);
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    if(!currentUser) {
+      navigate("/Kambaz/Account/Signin");
     }
     setPending(false);
-  };
-  useEffect(() => {
-    fetchProfile();
   }, [currentUser]);
+  
   if (!pending) {
     return children;
   }

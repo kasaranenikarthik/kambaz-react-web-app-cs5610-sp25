@@ -22,7 +22,7 @@ export default function Kambaz() {
   const findCoursesForUser = async () => { 
    try { 
      const courses = await userClient.findCoursesForUser(currentUser._id); 
-     console.log(currentUser._id);
+     //console.log(currentUser._id);
      setCourses(courses); 
     } catch (error) { 
       console.error(error); 
