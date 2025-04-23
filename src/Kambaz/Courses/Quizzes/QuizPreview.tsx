@@ -122,7 +122,7 @@ export default function QuizPreview() {
     
     setScore({
       correct: correctCount,
-      total: questions.length,
+      total: questions.reduce((acc, q) => acc + q.points, 0),
       percentage
     });
     
