@@ -1,7 +1,6 @@
 import React from "react";
 import { Form, Button } from "react-bootstrap";
 import { TrueFalseQuestion } from "../QuizQuestionEditor";
-import { FaCheck } from "react-icons/fa";
 
 interface TrueFalseEditorProps {
   question: TrueFalseQuestion;
@@ -26,7 +25,7 @@ export default function TrueFalseEditor({ question, onChange, onCancel, onSave }
     });
   };
 
-  const handleCorrectAnswerChange = (value: boolean) => {
+  const handleCorrectAnswerChange = (value: string) => {
     onChange({
       ...question,
       correctAnswer: value
@@ -76,9 +75,9 @@ export default function TrueFalseEditor({ question, onChange, onCancel, onSave }
                 type="radio"
                 id="true-answer"
                 label="True"
-                checked={question.correctAnswer === true}
-                onChange={() => handleCorrectAnswerChange(true)}
-                className={question.correctAnswer ? "fw-bold" : ""}
+                checked={question.correctAnswer === "True"}
+                onChange={() => handleCorrectAnswerChange("True")}
+                className={question.correctAnswer === "True" ? "fw-bold" : ""}
               />
             </div>
             <div className="d-flex align-items-center">
@@ -86,9 +85,9 @@ export default function TrueFalseEditor({ question, onChange, onCancel, onSave }
                 type="radio"
                 id="false-answer"
                 label="False"
-                checked={question.correctAnswer === false}
-                onChange={() => handleCorrectAnswerChange(false)}
-                className={!question.correctAnswer ? "fw-bold" : ""}
+                checked={question.correctAnswer === "False"}
+                onChange={() => handleCorrectAnswerChange("False")}
+                className={question.correctAnswer === "False" ? "fw-bold" : ""}
               />
             </div>
           </div>

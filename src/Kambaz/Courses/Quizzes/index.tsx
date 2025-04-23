@@ -1,7 +1,7 @@
 import { Button, ListGroup, ListGroupItem } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa6";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import QuizControls from "./QuizControls";
 import { IoRocketOutline } from "react-icons/io5";
 import * as quizClient from "./client.ts";
@@ -14,6 +14,7 @@ export default function Quizzes() {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const { cid } = useParams();
   const [quizList, setQuizzes] = useState([]);
+  const navigate = useNavigate();
 
   const fetchQuizzes = async () => {
     const quizzes = await quizClient.getQuizzesForCourse(cid);
@@ -42,6 +43,7 @@ export default function Quizzes() {
               };
               await quizClient.createQuiz(cid, qu._id, qu);
               setQuizzes([...quizList, qu] as any);
+              navigate(`/Kambaz/Courses/${cid}/Quizzes/${qu._id}/details`);
             }
           }>
           <FaPlus className="position-relative me-2" />

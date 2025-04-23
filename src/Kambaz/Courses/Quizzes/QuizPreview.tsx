@@ -9,8 +9,10 @@ interface QuizQuestion {
   _id: string;
   quiz: string;
   question: string;
-  answer: string;
+  correctAnswer: string;
   type: string;
+  points: number;
+  options?: string[]; // For multiple choice questions
 }
 
 interface Quiz {
@@ -23,7 +25,7 @@ interface Quiz {
 }
 
 interface UserAnswers {
-  [key: string]: string | boolean;
+  [key: string]: string;
 }
 
 export default function QuizPreview() {
@@ -63,7 +65,7 @@ export default function QuizPreview() {
           // Initialize userAnswers object with empty values
           const initialAnswers: UserAnswers = {};
           quizQuestions.forEach((q: QuizQuestion) => {
-            initialAnswers[q._id] = q.type === "TRUE_FALSE" ? false : "";
+            initialAnswers[q._id] = "";
           });
           setUserAnswers(initialAnswers);
         }
@@ -78,7 +80,7 @@ export default function QuizPreview() {
   }, [cid, qid]);
   
   // Handle answer changes
-  const handleAnswerChange = (questionId: string, answer: string | boolean) => {
+  const handleAnswerChange = (questionId: string, answer: string) => {
     setUserAnswers(prev => ({
       ...prev,
       [questionId]: answer
@@ -101,24 +103,22 @@ export default function QuizPreview() {
   // Calculate score and set results
   const submitQuiz = () => {
     let correctCount = 0;
+    let totalPoints = 0;
     const questionResults: {[key: string]: boolean} = {};
     
     questions.forEach(question => {
       const userAnswer = userAnswers[question._id];
-      const correctAnswer = question.type === "TRUE_FALSE" 
-        ? question.answer === "true" 
-        : question.answer;
-      
-      const isCorrect = String(userAnswer).toLowerCase() === String(correctAnswer).toLowerCase();
+      const isCorrect = String(userAnswer).toLowerCase() === question.correctAnswer.toLowerCase();
       
       if (isCorrect) {
-        correctCount++;
+        correctCount = correctCount + question.points;
       }
+      totalPoints = totalPoints + question.points;
       
       questionResults[question._id] = isCorrect;
     });
     
-    const percentage = Math.round((correctCount / questions.length) * 100);
+    const percentage = Math.round((correctCount / totalPoints) * 100);
     
     setScore({
       correct: correctCount,
@@ -134,7 +134,7 @@ export default function QuizPreview() {
   const resetQuiz = () => {
     const initialAnswers: UserAnswers = {};
     questions.forEach(q => {
-      initialAnswers[q._id] = q.type === "TRUE_FALSE" ? false : "";
+      initialAnswers[q._id] = "";
     });
     
     setUserAnswers(initialAnswers);
@@ -213,7 +213,7 @@ export default function QuizPreview() {
                       <strong>Your answer:</strong> {String(userAnswers[question._id])}
                     </p>
                     <p>
-                      <strong>Correct answer:</strong> {question.answer}
+                      <strong>Correct answer:</strong> {question.correctAnswer}
                     </p>
                   </Card.Body>
                 </Card>
@@ -234,8 +234,25 @@ export default function QuizPreview() {
     );
   }
   
+
+  // Helper function to format options for multiple choice questions
+  const getFormattedOptions = (question: QuizQuestion) => {
+    if (!question.options) return [];
+    
+    // Handle both formats: array of strings or array of objects
+    return question.options.map((option) => {
+      if (typeof option === 'string') {
+        return { text: option };
+      }
+      return option;
+    });
+  };
+
+
   // Current question for answering
   const currentQ = questions[currentQuestion] || null;
+
+  const formattedOptions = getFormattedOptions(currentQ);
   
   // Quiz-taking view
   return (
@@ -274,37 +291,52 @@ export default function QuizPreview() {
           {currentQ && (
             <Card className="mb-4">
               <Card.Header>
-                Question {currentQuestion + 1} <span className="float-end">1 pt</span>
+                Question {currentQuestion + 1} <span className="float-end">{currentQ.points} pt</span>
               </Card.Header>
               <Card.Body>
                 <p>{currentQ.question}</p>
                 
-                {currentQ.type === "TRUE_FALSE" ? (
+                {currentQ.type === "TRUE_FALSE" && (
                   <Form>
                     <Form.Check 
                       type="radio"
                       id="true-answer"
                       label="True"
-                      checked={userAnswers[currentQ._id] === true}
-                      onChange={() => handleAnswerChange(currentQ._id, true)}
+                      checked={userAnswers[currentQ._id] === "True"}
+                      onChange={() => handleAnswerChange(currentQ._id, "True")}
                       className="mb-2"
                     />
                     <Form.Check 
                       type="radio"
                       id="false-answer"
                       label="False"
-                      checked={userAnswers[currentQ._id] === false}
-                      onChange={() => handleAnswerChange(currentQ._id, false)}
+                      checked={userAnswers[currentQ._id] === "False"}
+                      onChange={() => handleAnswerChange(currentQ._id, "False")}
                     />
                   </Form>
-                ) : (
-                  // For multiple choice questions, we'd need to parse options
-                  // This is a simplified version that lets users type in their answer
-                  <Form.Control
-                    type="text"
-                    placeholder="Type your answer here"
-                    value={userAnswers[currentQ._id] as string || ""}
-                    onChange={(e) => handleAnswerChange(currentQ._id, e.target.value)}
+                )} 
+                { currentQ.type === "MULTIPLE_CHOICE" && (
+                  <Form>
+                    {formattedOptions.map((option, optIndex) => (
+                      <Form.Check 
+                        key={optIndex}
+                        type="radio"
+                        id={`option-${optIndex}`}
+                        label={option.text}
+                        checked={userAnswers[currentQ._id] === option.text}
+                        onChange={() => handleAnswerChange(currentQ._id, option.text)}
+                        className="mb-2"
+                      />
+                    ))}
+                  </Form>
+                )} 
+                { currentQ.type === "FILL_IN_BLANK" &&(
+                  <Form.Control 
+                    as="textarea" 
+                    rows={3} 
+                    value={userAnswers[currentQ._id]} 
+                    onChange={(e) => handleAnswerChange(currentQ._id, e.target.value)} 
+                    placeholder="Type your answer here..."
                   />
                 )}
               </Card.Body>

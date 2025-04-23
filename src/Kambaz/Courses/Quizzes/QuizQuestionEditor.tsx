@@ -20,13 +20,13 @@ export interface BaseQuestion {
 
 export interface MultipleChoiceQuestion extends BaseQuestion {
   type: "MULTIPLE_CHOICE";
-  options: Array<{text: string;}>;
+  options: Array< string>;
   correctAnswer: string;
 }
 
 export interface TrueFalseQuestion extends BaseQuestion {
   type: "TRUE_FALSE";
-  correctAnswer: boolean;
+  correctAnswer: string;
 }
 
 export interface FillInBlankQuestion extends BaseQuestion {
@@ -156,7 +156,7 @@ export default function QuizQuestionsEditor() {
         course: cid || "",
         points: 1,
         isEditing: true,
-        options: [{ text: ""}, { text: ""}, { text: ""}, { text: ""}],
+        options: [""],
         correctAnswer: ""
       } as MultipleChoiceQuestion;
     } else if (newQuestionType === "TRUE_FALSE") {
@@ -168,7 +168,7 @@ export default function QuizQuestionsEditor() {
         course: cid || "",
         points: 1,
         isEditing: true,
-        correctAnswer: false
+        correctAnswer: "False"
       } as TrueFalseQuestion;
     } else {
       newQuestion = {
@@ -375,7 +375,7 @@ export default function QuizQuestionsEditor() {
                           )}
                           {question.type === "TRUE_FALSE" && (
                             <div className="ms-3">
-                              True/False question: Correct answer is {(question as TrueFalseQuestion).correctAnswer ? "True" : "False"}
+                              True/False question: Correct answer is {(question as TrueFalseQuestion).correctAnswer}
                             </div>
                           )}
                           {question.type === "FILL_IN_BLANK" && (

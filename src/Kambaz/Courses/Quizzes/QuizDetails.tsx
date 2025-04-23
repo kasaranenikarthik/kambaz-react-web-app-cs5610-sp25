@@ -179,7 +179,7 @@ export default function QuizDetails()
               <b>Shuffle answers </b>
             </div>
             <div className="col-3">
-              {quiz.shufflesAns}
+              {quiz.shufflesAns ? "Yes" : "No"}
             </div>
           </div>
 
@@ -197,7 +197,7 @@ export default function QuizDetails()
               <b>Multiple Attempts </b>
             </div>
             <div className="col-3">
-              {quiz.multipleAttempts}
+              {quiz.multipleAttempts ? "Yes" : "No"}
             </div>
           </div>
 
@@ -215,7 +215,7 @@ export default function QuizDetails()
               <b>View Responses </b>
             </div>
             <div className="col-3">
-              {quiz.viewResponses}
+              {quiz.viewResponses ? "Yes" : "No"}
             </div>
           </div>
 
@@ -224,7 +224,7 @@ export default function QuizDetails()
               <b>Show Correct Answers </b>
             </div>
             <div className="col-3">
-              {quiz.showCorrectAnswers}
+              {quiz.showCorrectAnswers ? "Immediately" : "Not immediately"}
             </div>
           </div>
 
@@ -233,7 +233,7 @@ export default function QuizDetails()
               <b>One Question at a Time </b>
             </div>
             <div className="col-3">
-              {quiz.oneQaTime}
+              {quiz.oneQaTime ? "Yes" : "No"}
             </div>
           </div>
 
@@ -242,7 +242,7 @@ export default function QuizDetails()
               <b>Require Respondus LockDown Browser  </b>
             </div>
             <div className="col-3">
-              {quiz.lockdownBrowser}
+              {quiz.lockdownBrowser ? "Yes" : "No"}
             </div>
           </div>
 
@@ -251,7 +251,7 @@ export default function QuizDetails()
               <b>Required to View Quiz Results </b>
             </div>
             <div className="col-3">
-              {quiz.viewResults}
+              {quiz.viewResults ? "Yes" : "No"}
             </div>
           </div>
 
@@ -260,7 +260,7 @@ export default function QuizDetails()
               <b>Webcam Required </b>
             </div>
             <div className="col-3">
-              {quiz.webcam}
+              {quiz.webcam ? "Yes" : "No"}
             </div>
           </div>
 
@@ -269,7 +269,7 @@ export default function QuizDetails()
               <b>Lock Questions After Answering </b>
             </div>
             <div className="col-3">
-              {quiz.lockQafterA}
+              {quiz.lockQafterA ? "Yes" : "No"}
             </div>
           </div>
         </div>
