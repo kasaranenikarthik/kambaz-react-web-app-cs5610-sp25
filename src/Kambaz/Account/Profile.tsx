@@ -53,9 +53,6 @@ export default function Profile() {
           <Button onClick={signout} className="w-100 mb-2 bg-danger" id="wd-signout-btn">
             Sign out
           </Button>
-          <div>
-              {JSON.stringify(profile, null, 2)}
-          </div>
         </div>
       )}
     </div>
