@@ -75,7 +75,7 @@ export default function QuizResults() {
         if (attempts && attempts.length > 0) {
           // Clone the attempt data
           const attemptData = JSON.parse(JSON.stringify(attempts[0])) as Attempt;
-          console.log("Attempt data:", attemptData);
+          //console.log("Attempt data:", attemptData);
           
           // Calculate correct answers on the frontend
           if (quizQuestions.length > 0 && attemptData.answers) {
@@ -170,8 +170,11 @@ export default function QuizResults() {
             </h4>
           </Alert>
           
-          <h5 className="mt-4">Question Results:</h5>
-          {questions.map((question, index) => {
+          
+          { quiz.showCorrectAnswers ? 
+            <h5 className="mt-4">Question Results:</h5> : <h5>Showing Correct Answers is disabled</h5>
+          }
+          {quiz.showCorrectAnswers && questions.map((question, index) => {
             const answerObj = attempt.answers.find(a => a.questionId === question._id);
             const userAnswer = answerObj ? answerObj.answer : "Not answered";
             const isCorrect = answerObj?.result === "correct" ? true : false;

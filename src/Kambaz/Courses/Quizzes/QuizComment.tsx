@@ -22,10 +22,11 @@ export default function QuizControlButtons({quiz}: {quiz: any; })
         const currentDate = new Date();
         const availableFrom = new Date(quiz.availableFrom);
         const availableUntil = new Date(quiz.availableUntil);
+        const dueDate = new Date(quiz.due);
 
         if (currentDate < availableFrom) {
             return <span>Not available until {quiz.availableFrom}</span>;
-        } else if (currentDate > availableUntil) {
+        } else if (currentDate > availableUntil || currentDate > dueDate) {
             return <span>Closed</span>;
         } else {
             return <span>Available</span>;
@@ -35,13 +36,12 @@ export default function QuizControlButtons({quiz}: {quiz: any; })
     const lastAttempt = async (quiz: any) => {
         const attempt = await quizClient.findQuizAttemptById(quiz.course, quiz._id, currentUser._id);
         if (attempt.length !== 0) {
-            setAttempt(attempt);
+            setAttempt(attempt[0]);
         } 
     }
 
     const lastScore = () => {
         return <span>{attempt.score}</span>;
-
     }
 
     return (

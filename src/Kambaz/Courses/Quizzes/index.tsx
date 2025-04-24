@@ -1,4 +1,4 @@
-import { Button, ListGroup, ListGroupItem } from "react-bootstrap";
+import { Alert, Button, ListGroup, ListGroupItem } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
@@ -26,8 +26,9 @@ export default function Quizzes() {
     const currentDate = new Date();
     const availableFrom = new Date(quiz.availableFrom);
     const availableUntil = new Date(quiz.availableUntil);
+    const dueDate = new Date(quiz.due);
 
-    if (currentDate < availableFrom || currentDate > availableUntil) {
+    if (currentDate < availableFrom || currentDate > availableUntil || currentDate > dueDate) {
         return false;
     } else{
         return true;
@@ -66,6 +67,25 @@ export default function Quizzes() {
       </div>
       <h3 className="bg-secondary ps-2 mt-2 rounded-1 fw-bold dropdown-toggle w-100">Quizzes
       </h3>
+      {
+        currentUser.role === "FACULTY" && quizList.length === 0 &&(
+          <div>
+            <Alert>
+              <Alert.Heading className="text-center">No Quizzes Created</Alert.Heading>
+              <p className="text-center">Click on the + Quiz button to create a new quiz.</p>
+            </Alert>
+          </div>
+        )
+      }
+      {
+        currentUser.role === "STUDENT" && quizList.length === 0 &&(
+          <div>
+            <Alert>
+              <Alert.Heading className="text-center">No Quizzes Created</Alert.Heading>
+            </Alert>
+          </div>
+        )
+      }
       { currentUser.role === "FACULTY" && (
         <div className="wd-quiz-list">
           <ListGroup className="list-group">

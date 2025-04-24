@@ -25,6 +25,7 @@ interface Quiz {
   maxAttempts: number;
   points: number;
   timeLmt: number;
+  showCorrectAnswers: boolean;
 }
 
 interface UserAnswers {
@@ -334,8 +335,8 @@ export default function QuizAttempt() {
             </Alert>
             
             <div className="mb-4">
-              <h5>Question Results:</h5>
-              {questions.map((question, index) => {
+            { quiz.showCorrectAnswers ? <h5 className="mt-4">Question Results:</h5> : <h5>Showing Correct Answers is disabled</h5>}
+              {quiz.showCorrectAnswers && questions.map((question, index) => {
                 const userAnswer = userAnswers[question._id];
                 const isCorrect = results[question._id] === "correct" ? true : false;
                 

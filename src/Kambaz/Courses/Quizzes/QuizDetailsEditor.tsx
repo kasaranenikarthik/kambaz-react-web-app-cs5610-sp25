@@ -92,6 +92,15 @@ export default function QuizDetailsEditor() {
     }
   };
 
+   const publishQuiz = async() => {
+      const status = await quizClient.publishQuiz(quiz.course, quiz._id, quiz);
+      if (status === 200) {
+          setQuiz({...quiz, published: true});
+      } else {
+          console.error("Failed to publish quiz");
+      }
+    }
+
   const handleCancel = () => {
     navigate(-1);
   };
@@ -302,7 +311,49 @@ export default function QuizDetailsEditor() {
                   />
                 </Form.Group>
 
+                <Form.Group className="mb-2">
+                  <Form.Check
+                    type="checkbox"
+                    id="showCorrectAnswers"
+                    label="Show Correct Answers"
+                    name="showCorrectAnswers"
+                    checked={quiz.showCorrectAnswers}
+                    onChange={handleChange}
+                  />
+                </Form.Group>
 
+                <Form.Group className="mb-2">
+                  <Form.Check
+                    type="checkbox"
+                    id="oneQaTime"
+                    label="One Question at a time"
+                    name="oneQaTime"
+                    checked={quiz.oneQaTime}
+                    onChange={handleChange}
+                  />
+                </Form.Group>
+
+
+              </div>
+
+              <div className="border rounded p-3 mb-3">
+                <h5>Access Code</h5>
+                <Form.Group className="mb-2">
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter Access Code"
+                    name="accessCode"
+                    value={quiz.accessCode}
+                    onChange={(e) => 
+                      {
+                        if (e.target.value === "") {
+                          setQuiz({...quiz, accessCode: "", for:"Everyone"})
+                        } else {
+                          setQuiz({...quiz, accessCode: e.target.value})}
+                        }
+                      }
+                  />
+                </Form.Group>
               </div>
 
               <div className="border rounded p-3 mb-3">
@@ -359,6 +410,16 @@ export default function QuizDetailsEditor() {
                   type="button"
                 >
                   Save
+                </Button>
+                <Button 
+                  variant="danger" 
+                  onClick={() => {
+                    publishQuiz()
+                    handleSave(cid, qid)
+                  }}
+                  type="button"
+                >
+                  Save and Publish
                 </Button>
               </div>
             </Form>

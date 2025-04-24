@@ -238,19 +238,19 @@ export default function QuizPreview() {
   // Helper function to format options for multiple choice questions
   const getFormattedOptions = (question: QuizQuestion) => {
     if (!question.options) return [];
-    
-    // Handle both formats: array of strings or array of objects
-    return question.options.map((option) => {
+   else{
+    return question.options?.map((option) => {
       if (typeof option === 'string') {
         return { text: option };
       }
       return option;
     });
+  }
   };
 
 
   // Current question for answering
-  const currentQ = questions[currentQuestion] || null;
+  const currentQ = questions[currentQuestion] || {};
 
   const formattedOptions = getFormattedOptions(currentQ);
   
@@ -264,112 +264,117 @@ export default function QuizPreview() {
           </Button>
         </Link>
       </div>
+      {questions.length === 0 && (
+        <Alert variant="warning">No questions available for this quiz.</Alert>
+      )}
+      {questions.length > 0 && (
       
-      <Card>
-        <Card.Header className="bg-light d-flex justify-content-between align-items-center">
-          <div>
-            <h3>{quiz.title} - Preview</h3>
-            <div className="text-muted">Faculty Preview Mode</div>
-          </div>
-          <Button variant="primary" onClick={goToEditQuiz}>
-            Edit Quiz
-          </Button>
-        </Card.Header>
-        
-        <Card.Body>
-          <Alert variant="info">
-            This is a preview of the published version of the quiz
-          </Alert>
+        <Card>
+          <Card.Header className="bg-light d-flex justify-content-between align-items-center">
+            <div>
+              <h3>{quiz.title} - Preview</h3>
+              <div className="text-muted">Faculty Preview Mode</div>
+            </div>
+            <Button variant="primary" onClick={goToEditQuiz}>
+              Edit Quiz
+            </Button>
+          </Card.Header>
           
-          <div className="mb-3">
-            <ProgressBar 
-              now={((currentQuestion + 1) / questions.length) * 100} 
-              label={`${currentQuestion + 1}/${questions.length}`} 
-            />
-          </div>
-          
-          {currentQ && (
-            <Card className="mb-4">
-              <Card.Header>
-                Question {currentQuestion + 1} <span className="float-end">{currentQ.points} pt</span>
-              </Card.Header>
-              <Card.Body>
-                <p>{currentQ.question}</p>
-                
-                {currentQ.type === "TRUE_FALSE" && (
-                  <Form>
-                    <Form.Check 
-                      type="radio"
-                      id="true-answer"
-                      label="True"
-                      checked={userAnswers[currentQ._id] === "True"}
-                      onChange={() => handleAnswerChange(currentQ._id, "True")}
-                      className="mb-2"
-                    />
-                    <Form.Check 
-                      type="radio"
-                      id="false-answer"
-                      label="False"
-                      checked={userAnswers[currentQ._id] === "False"}
-                      onChange={() => handleAnswerChange(currentQ._id, "False")}
-                    />
-                  </Form>
-                )} 
-                { currentQ.type === "MULTIPLE_CHOICE" && (
-                  <Form>
-                    {formattedOptions.map((option, optIndex) => (
+          <Card.Body>
+            <Alert variant="info">
+              This is a preview of the published version of the quiz
+            </Alert>
+            
+            <div className="mb-3">
+              <ProgressBar 
+                now={((currentQuestion + 1) / questions.length) * 100} 
+                label={`${currentQuestion + 1}/${questions.length}`} 
+              />
+            </div>
+            
+            {currentQ && (
+              <Card className="mb-4">
+                <Card.Header>
+                  Question {currentQuestion + 1} <span className="float-end">{currentQ.points} pt</span>
+                </Card.Header>
+                <Card.Body>
+                  <p>{currentQ.question}</p>
+                  
+                  {currentQ.type === "TRUE_FALSE" && (
+                    <Form>
                       <Form.Check 
-                        key={optIndex}
                         type="radio"
-                        id={`option-${optIndex}`}
-                        label={option.text}
-                        checked={userAnswers[currentQ._id] === option.text}
-                        onChange={() => handleAnswerChange(currentQ._id, option.text)}
+                        id="true-answer"
+                        label="True"
+                        checked={userAnswers[currentQ._id] === "True"}
+                        onChange={() => handleAnswerChange(currentQ._id, "True")}
                         className="mb-2"
                       />
-                    ))}
-                  </Form>
-                )} 
-                { currentQ.type === "FILL_IN_BLANK" &&(
-                  <Form.Control 
-                    as="textarea" 
-                    rows={3} 
-                    value={userAnswers[currentQ._id]} 
-                    onChange={(e) => handleAnswerChange(currentQ._id, e.target.value)} 
-                    placeholder="Type your answer here..."
-                  />
-                )}
-              </Card.Body>
-            </Card>
-          )}
-          
-          <div className="d-flex justify-content-between">
-            <Button 
-              variant="outline-secondary" 
-              onClick={goToPrevQuestion}
-              disabled={currentQuestion === 0}
-            >
-              Previous
-            </Button>
-            
-            {currentQuestion < questions.length - 1 ? (
-              <Button 
-                variant="outline-primary" 
-                onClick={goToNextQuestion}
-              >
-                Next
-              </Button>
-            ) : (
-              <Button 
-                variant="danger" 
-                onClick={submitQuiz}
-              >
-                Submit Quiz
-              </Button>
+                      <Form.Check 
+                        type="radio"
+                        id="false-answer"
+                        label="False"
+                        checked={userAnswers[currentQ._id] === "False"}
+                        onChange={() => handleAnswerChange(currentQ._id, "False")}
+                      />
+                    </Form>
+                  )} 
+                  { currentQ.type === "MULTIPLE_CHOICE" && (
+                    <Form>
+                      {formattedOptions.map((option, optIndex) => (
+                        <Form.Check 
+                          key={optIndex}
+                          type="radio"
+                          id={`option-${optIndex}`}
+                          label={option.text}
+                          checked={userAnswers[currentQ._id] === option.text}
+                          onChange={() => handleAnswerChange(currentQ._id, option.text)}
+                          className="mb-2"
+                        />
+                      ))}
+                    </Form>
+                  )} 
+                  { currentQ.type === "FILL_IN_BLANK" &&(
+                    <Form.Control 
+                      as="textarea" 
+                      rows={3} 
+                      value={userAnswers[currentQ._id]} 
+                      onChange={(e) => handleAnswerChange(currentQ._id, e.target.value)} 
+                      placeholder="Type your answer here..."
+                    />
+                  )}
+                </Card.Body>
+              </Card>
             )}
-          </div>
-        </Card.Body>
-      </Card>
+            
+            <div className="d-flex justify-content-between">
+              <Button 
+                variant="outline-secondary" 
+                onClick={goToPrevQuestion}
+                disabled={currentQuestion === 0}
+              >
+                Previous
+              </Button>
+              
+              {currentQuestion < questions.length - 1 ? (
+                <Button 
+                  variant="outline-primary" 
+                  onClick={goToNextQuestion}
+                >
+                  Next
+                </Button>
+              ) : (
+                <Button 
+                  variant="danger" 
+                  onClick={submitQuiz}
+                >
+                  Submit Quiz
+                </Button>
+              )}
+            </div>
+          </Card.Body>
+        </Card>
+      )}
     </Container>
   );
 }
