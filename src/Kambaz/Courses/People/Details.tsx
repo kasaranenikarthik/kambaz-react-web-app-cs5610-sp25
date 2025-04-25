@@ -6,6 +6,8 @@ import { useParams, useNavigate } from "react-router";
 import * as client from "../../Account/client"; 
 import { FormControl } from "react-bootstrap";
 import { FaPencil } from "react-icons/fa6";
+import { useSelector } from "react-redux";
+
 export default function PeopleDetails() { 
     const [name, setName] = useState(""); 
     const [editing, setEditing] = useState(false); 
@@ -13,6 +15,7 @@ export default function PeopleDetails() {
     const [roleEditing, setRoleEditing] = useState(false);
     const [email, setEmail] = useState("");
     const [emailEditing, setEmailEditing] = useState(false);
+    const { currentUser } = useSelector((state: any) => state.accountReducer);
 
     const saveUser = async () => { 
         const [firstName, lastName] = name.split(" "); 
@@ -52,7 +55,8 @@ export default function PeopleDetails() {
   }; 
   
   useEffect(() => { 
-    if (uid) fetchUser(); 
+    if (uid) fetchUser();
+
   }, [uid]);
 
   if (!uid) return null; 
@@ -63,18 +67,18 @@ export default function PeopleDetails() {
                 <IoCloseSharp className="fs-1" /> </button> 
             <div className="text-center mt-2"> <FaUserCircle className="text-secondary me-2 fs-1" /> </div><hr /> 
             <div className="text-danger fs-4 wd-name">
-                {! editing && user.role !== "ADMIN" && (<div>{`${user.firstName} ${user.lastName}`}</div>)}
-                {!editing && user.role === "ADMIN" && ( 
+                {! editing && currentUser.role !== "ADMIN" && (<div>{`${user.firstName} ${user.lastName}`}</div>)}
+                {!editing && currentUser.role === "ADMIN" && ( 
                         <FaPencil onClick={() => setEditing(true)} 
                             className="float-end fs-5 mt-2 wd-edit" /> )} 
-                {editing && user.role === "ADMIN" &&  ( 
+                {editing && currentUser.role === "ADMIN" &&  ( 
                 <FaCheck onClick={() => saveUser()} 
                     className="float-end fs-5 mt-2 me-2 wd-save" /> )} 
-                {!editing && user.role === "ADMIN" && ( 
+                {!editing && currentUser.role === "ADMIN" && ( 
                 <div className="wd-name" 
                     onClick={() => setEditing(true)}> 
                     {user.firstName} {user.lastName}</div>)} 
-                {user && editing &&user.role === "ADMIN" && ( 
+                {currentUser && editing &&currentUser.role === "ADMIN" && ( 
                     <FormControl className="w-50 wd-edit-name" 
                         defaultValue={`${user.firstName} ${user.lastName}`} 
                         onChange={(e) => setName(e.target.value)} 
@@ -83,16 +87,16 @@ export default function PeopleDetails() {
             </div> 
             <div>
                 <b>Email:</b> 
-                {!emailEditing && user.role !== "ADMIN" && (<div>{user.email}</div>)}
-                {!emailEditing && user.role === "ADMIN" && (<div>{user.email}
+                {!emailEditing && currentUser.role !== "ADMIN" && (<div>{user.email}</div>)}
+                {!emailEditing && currentUser.role === "ADMIN" && (<div>{user.email}
                     <FaPencil onClick={() => 
                         {   setEmail(user.email);
                             setEmailEditing(true); }} 
                         className="float-end fs-5 mt-2 wd-edit" /></div>)}  
-                {emailEditing && user.role === "ADMIN" && (<div>
+                {emailEditing && currentUser.role === "ADMIN" && (<div>
                     <FaCheck onClick={() => saveUser()}
                         className="float-end fs-5 mt-2 me-2 wd-save" /> </div> )}
-                {emailEditing && user.role === "ADMIN" && (
+                {emailEditing && currentUser.role === "ADMIN" && (
                     <FormControl className="wd-edit-email w-75" 
                         defaultValue={email} 
                         onChange={(e) => setEmail(e.target.value)} 
@@ -101,13 +105,13 @@ export default function PeopleDetails() {
                     )}
             </div>
             <b>Roles:</b>
-            {!roleEditing && user.role !== "ADMIN" && (<div>{user.role}</div>)} 
-            {!roleEditing && user.role === "ADMIN" && (<div>{user.role} 
+            {!roleEditing && currentUser.role !== "ADMIN" && (<div>{user.role}</div>)} 
+            {!roleEditing && currentUser.role === "ADMIN" && (<div>{user.role} 
                 <FaPencil onClick={() => {setRole(user.role); setRoleEditing(true); }} 
                     className="float-end fs-5 mt-2 wd-edit" />
                 <br/>
                 </div>)}
-            {roleEditing && user.role === "ADMIN" && (<div> 
+            {roleEditing && currentUser.role === "ADMIN" && (<div> 
                 <select value={role} onChange={(e) =>setRole(e.target.value)} onKeyDown={(e) => {if (e.key === "Enter") { saveUser(); }}} 
                     className="form-select float-start wd-select-role w-75" >    
                     <option value="STUDENT">Students</option> 
@@ -129,7 +133,7 @@ export default function PeopleDetails() {
                 <hr/>
             </div>
             
-            { user.role === "ADMIN" &&
+            { currentUser.role === "ADMIN" &&
                 <button onClick={() => deleteUser(uid)} className="btn btn-danger float-end wd-delete" > Delete </button> 
             }   
             <button onClick={() => navigate(-1)} 
